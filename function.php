@@ -123,5 +123,84 @@ function updatedragontiger($id,$column,$bet){
 		}
 		$n++;
 	}
+	update($id,'dragontiger','play',1);
+	return $rtext;
+}
+function resultdragontiger($f,$s){
+	global $con;
+	$sql="SELECT * FROM dragontiger";
+	$result=$con->query($sql);
+	$row = $result->fetch_assoc();
+	$arr=array("0","0","0");
+	$money=0;
+	$rtext="";
+	if($f>$s){
+		$arr[0]=1;
+	}
+	elseif($f<$s){
+		$arr[1]=1;
+	}
+	else{
+		$arr[2]=1;
+	}
+	while($row = $result->fetch_assoc()){
+		if($row['play']==1){
+			$n=0;
+			foreach($row as $i=>$v){
+				if($n==7&&$v!=0){
+					if($arr==1){
+						$money+=$v;
+						$row['NET']+=$money;
+						update($row['ID'],'dragontiger','NET',$row['NET']);
+						$rtext.="คุณ ".json_decode($row['Name'],true)." ได้ $money บาท ยอดรวม ".$row['NET'].' บาท
+';
+					}
+					else{
+						$money-=$v;
+						$row['NET']+=$money;
+						update($row['ID'],'dragontiger','NET',$row['NET']);
+						$rtext.="คุณ ".json_decode($row['Name'],true)." เสีย $money บาท ยอดรวม ".$row['NET'].' บาท
+';
+					}
+				}
+				elseif($n==8&&$v!=0){
+					if($arr==1){
+						$money+=$v;
+						$row['NET']+=$money;
+						update($row['ID'],'dragontiger','NET',$row['NET']);
+						$rtext.="คุณ ".json_decode($row['Name'],true)." ได้ $money บาท ยอดรวม ".$row['NET'].' บาท
+';
+					}
+					else{
+						$money-=$v;
+						$row['NET']+=$money;
+						update($row['ID'],'dragontiger','NET',$row['NET']);
+						$rtext.="คุณ ".json_decode($row['Name'],true)." เสีย $money บาท ยอดรวม ".$row['NET'].' บาท
+';
+					}
+				}
+				elseif($n==9&&$v!=0){
+					if($arr==1){
+						$money+=$v*8;
+						$row['NET']+=$money;
+						update($row['ID'],'dragontiger','NET',$row['NET']);
+						$rtext.="คุณ ".json_decode($row['Name'],true)." ได้ $money บาท ยอดรวม ".$row['NET'].' บาท
+';
+					}
+					else{
+						$money-=$v;
+						$row['NET']+=$money;
+						update($row['ID'],'dragontiger','NET',$row['NET']);
+						$rtext.="คุณ ".json_decode($row['Name'],true)." เสีย $money บาท ยอดรวม ".$row['NET'].' บาท
+';
+					}
+				}
+				$n++;
+			}
+			update($id,'dragontiger','play',0);
+		}
+	}
+	$rtext='สรุปรอบที่ '.select(1,'dragontiger','NET').'
+'.$rtext;
 	return $rtext;
 }
