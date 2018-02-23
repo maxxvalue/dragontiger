@@ -214,5 +214,6 @@ if (!is_null($events['events'])) {			//ตรวจสอบว่ามีข�
 		//curl_setopt($ch, CURLOPT_PROXY, $proxy);			//ตั้งความปลอดภัย
 		//curl_setopt($ch, CURLOPT_PROXYUSERPWD, $proxyauth);
 		curl_exec($ch);									//ส่งไปให้ไลน์ตอบกลับ
+		conclude();
 	}
 }
