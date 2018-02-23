@@ -114,15 +114,15 @@ function updatedragontiger($id,$column,$bet){
 	$n=0;
 	foreach($row as $i=>$v){
 		if($n>=7&&$i==$column&&$row['เสือ']!=0){
-			$rtext="คุณ ".json_decode($row["Name"],true)." เปลี่ยนจากแทง เสือ $v บาท เป็นแทง $i $bet บาท";
+			$rtext="คุณ ".json_decode($row["Name"],true)." เปลี่ยนจากแทง เสือ เป็นแทง $i $bet บาท";
 			update($id,"dragontiger",$i,$bet);
 		}
 		elseif($n>=7&&$i==$column&&$row['มังกร']!=0){
-			$rtext="คุณ ".json_decode($row["Name"],true)." เปลี่ยนจากแทง มังกร $v บาท เป็นแทง $i $bet บาท";
+			$rtext="คุณ ".json_decode($row["Name"],true)." เปลี่ยนจากแทง มังกร เป็นแทง $i $bet บาท";
 			update($id,"dragontiger",$i,$bet);
 		}
 		elseif($n>=7&&$i==$column&&$row['เสมอ']!=0){
-			$rtext="คุณ ".json_decode($row["Name"],true)." เปลี่ยนจากแทง เสมอ $v บาท เป็นแทง $i $bet บาท";
+			$rtext="คุณ ".json_decode($row["Name"],true)." เปลี่ยนจากแทง เสมอ เป็นแทง $i $bet บาท";
 			update($id,"dragontiger",$i,$bet);
 		}
 		elseif($n>=7&&$i==$column&&($v==0||$v==$bet)){
