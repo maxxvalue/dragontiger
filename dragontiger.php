@@ -64,7 +64,7 @@ if (!is_null($events['events'])) {			//ตรวจสอบว่ามีข�
 			$back=substr($text,$i+1); 
 			$sum+=$back;
 			//switch ตรวจสอบค่าแบบรับค่าหลายตัว
-			switch(front){
+			switch($front){
 				//case เสือ
 				case 1:
 				if($sum>select($id,$table,"NET")){
