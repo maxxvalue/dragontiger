@@ -218,3 +218,28 @@ function resultdragontiger($f,$s){
 '.$rtext;
 	return $rtext;
 }
+function conclude(){
+	global $con;
+	$sql="SELECT * FROM dragontiger";
+	$result=$con->query($sql);
+	$row = $result->fetch_assoc();
+	$tiger=0;
+	$dragon=0;
+	$tie=0;
+	while($row = $result->fetch_assoc()){
+		foreach($row as $n=>$v){
+			if($n=='เสือ'){
+				$tiger+=$v;
+			}
+			if($n=='มังกร'){
+				$dragon+=$v;
+			}
+			if($n=='เสมอ'){
+				$tie+=$v;
+			}
+		}
+	}
+	update(1,'dragontiger','เสือ',$tiger);
+	update(1,'dragontiger','มังกร',$dragon);
+	update(1,'dragontiger','เสมอ',$tie);
+}
