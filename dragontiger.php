@@ -154,22 +154,24 @@ if (!is_null($events['events'])) {			//ตรวจสอบว่ามีข�
 			}
 			
 			//check ผล
+			$number=array(1,2,3,4,5,6,7,8,9,10,11,12,13);
 			if($arr2[0]=="ผล"&&select(1,$table,"status")==0){
 				$arr3=str_split($arr2[1]);
 				$arr4=str_split($arr2[2]);
 				foreach($arr3 as $n=>$v){
-					if($v>=0){
+					if(in_array($v,$variable)){
 						$v=substr($arr2[1],$n);
+						
 						break;
 					}
 				}
 				foreach($arr4 as $n=>$u){
-					if($v>=0){
-						$v=substr($arr2[1],$n);
+					if(in_array($u,$variable)){
+						$u=substr($arr2[2],$n);
 						break;
 					}
 				}
-				if(1<=$v&&$v<=13&&1<=$u&&u<=13){
+				if(1<=$v&&$v<=13&&1<=$u&&$u<=13){
 					$replytext=resultdragontiger($v,$u);
 				}
 				else{
