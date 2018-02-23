@@ -160,7 +160,7 @@ function resultdragontiger($f,$s){
 						$money+=$v;
 						$row['NET']+=$money;
 						update($row['ID'],'dragontiger','NET',$row['NET']);
-						update($id,'dragontiger','เสือ',0);
+						update($row['ID'],'dragontiger','เสือ',0);
 						$rtext.="คุณ ".json_decode($row['Name'],true)." ได้ $money บาท ยอดรวม ".$row['NET'].' บาท
 ';
 					}
@@ -168,7 +168,7 @@ function resultdragontiger($f,$s){
 						$money-=$v;
 						$row['NET']+=$money;
 						update($row['ID'],'dragontiger','NET',$row['NET']);
-						update($id,'dragontiger','เสือ',0);
+						update($row['ID'],'dragontiger','เสือ',0);
 						$rtext.="คุณ ".json_decode($row['Name'],true)." เสีย $money บาท ยอดรวม ".$row['NET'].' บาท
 ';
 					}
@@ -178,7 +178,7 @@ function resultdragontiger($f,$s){
 						$money+=$v;
 						$row['NET']+=$money;
 						update($row['ID'],'dragontiger','NET',$row['NET']);
-						update($id,'dragontiger','มังกร',0);
+						update($row['ID'],'dragontiger','มังกร',0);
 						$rtext.="คุณ ".json_decode($row['Name'],true)." ได้ $money บาท ยอดรวม ".$row['NET'].' บาท
 ';
 					}
@@ -186,7 +186,7 @@ function resultdragontiger($f,$s){
 						$money-=$v;
 						$row['NET']+=$money;
 						update($row['ID'],'dragontiger','NET',$row['NET']);
-						update($id,'dragontiger','มังกร',0);
+						update($row['ID'],'dragontiger','มังกร',0);
 						$rtext.="คุณ ".json_decode($row['Name'],true)." เสีย $money บาท ยอดรวม ".$row['NET'].' บาท
 ';
 					}
@@ -196,7 +196,7 @@ function resultdragontiger($f,$s){
 						$money+=$v*8;
 						$row['NET']+=$money;
 						update($row['ID'],'dragontiger','NET',$row['NET']);
-						update($id,'dragontiger','เสมอ',0);
+						update($row['ID'],'dragontiger','เสมอ',0);
 						$rtext.="คุณ ".json_decode($row['Name'],true)." ได้ $money บาท ยอดรวม ".$row['NET'].' บาท
 ';
 					}
@@ -204,14 +204,14 @@ function resultdragontiger($f,$s){
 						$money-=$v;
 						$row['NET']+=$money;
 						update($row['ID'],'dragontiger','NET',$row['NET']);
-						update($id,'dragontiger','เสมอ',0);
+						update($row['ID'],'dragontiger','เสมอ',0);
 						$rtext.="คุณ ".json_decode($row['Name'],true)." เสีย $money บาท ยอดรวม ".$row['NET'].' บาท
 ';
 					}
 				}
 				$n++;
 			}
-			update($id,'dragontiger','play',0);
+			update($row['ID'],'dragontiger','play',0);
 		}
 	}
 	$rtext='สรุปรอบที่ '.select(1,'dragontiger','NET').'
@@ -242,4 +242,27 @@ function conclude(){
 	update(1,'dragontiger','เสือ',$tiger);
 	update(1,'dragontiger','มังกร',$dragon);
 	update(1,'dragontiger','เสมอ',$tie);
+}
+function sendline($lineid,$access_token,$messages){
+	$sent=[
+			[
+			'type' => 'text',
+			'text' => $messages
+			]
+		];
+	$url = 'https://api.line.me/v2/bot/message/push';		//url สำหรับตอบกลับ
+	$data = [
+		'to' => $lineid,				//replayToken ใส่ตรงนี้
+		'messages' => $sent,
+	];
+	$post = json_encode($data);						//web สำหรับตอบกลับ
+	$headers = array('Content-Type: application/json', 'Authorization: Bearer ' . $access_token);
+													//headers สำหรับตอบกลับ
+	$ch = curl_init($url);							//เริ่ม curl 
+	curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");//ปรับเป็นแบบ post
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);	
+	curl_setopt($ch, CURLOPT_POSTFIELDS, $post);	//ใส่ข้อความที่จะส่ง
+	curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);	//ส่ง header
+	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);	
+	curl_exec($ch);									//ส่งไปให้ไลน์ตอบกลับ
 }
