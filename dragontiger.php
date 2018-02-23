@@ -159,7 +159,7 @@ if (!is_null($events['events'])) {			//ตรวจสอบว่ามีข�
 				$arr4=str_split($arr2[2]);
 				foreach($arr3 as $v){}
 				foreach($arr4 as $u){}
-				if(1<=$v&&$v<=13&&1<=$u&&&u<=13){
+				if(1<=$v&&$v<=13&&1<=$u&&u<=13){
 					$replytext=resultdragontiger($v,$u);
 				}
 				else{
