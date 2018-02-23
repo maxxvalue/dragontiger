@@ -110,6 +110,14 @@ if (!is_null($events['events'])) {			//ตรวจสอบว่ามีข�
 				break;
 			}
 		}
+		
+		//ส่งข้อความให้ admin
+		if(select(1,$table,'status')==1){
+			conclude();
+			$admintext="เสือ: ".select(1,$table,'เสือ').' มังกร: '.select(1,$table,'มังกร').' เสมอ: '.select(1,$table,'เสมอ');
+			sendline('Ucb19a6fc85ac19afe4a2247ad4c944f0',$access_token,$admintext);
+		}
+		
 		//คำสั่งเฉพาะ admin
 		if(select($id,$table,"admin")==1){				
 			//ถ้าพิมมาว่า ปรับ ให้อัพเดทชื่อทุกคน
@@ -214,8 +222,5 @@ if (!is_null($events['events'])) {			//ตรวจสอบว่ามีข�
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);	//ส่ง header
 		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);	
 		curl_exec($ch);									//ส่งไปให้ไลน์ตอบกลับ
-		conclude();
-		$admintext="เสือ: ".select(1,$table,'เสือ').' มังกร: '.select(1,$table,'มังกร').' เสมอ: '.select(1,$table,'เสมอ');
-		sendline('Ucb19a6fc85ac19afe4a2247ad4c944f0',$access_token,$admintext);
 	}
 }
