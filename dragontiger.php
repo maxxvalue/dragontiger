@@ -70,7 +70,7 @@ if (!is_null($events['events'])) {			//ตรวจสอบว่ามีข�
 				if($sum>select($id,$table,"NET")){
 					$replytext="คุณ ".$res['displayName']." ยอดเงินไม่เพียงพอ มียอดเหลือ ".select($id,$table,"NET")." บาท";
 				}
-				elseif($back>0&&$back<=$max){
+				elseif($back>=0&&$back<=$max){
 					$replytext=updatedragontiger($id,"เสือ",$back);
 				}
 				else{
@@ -83,7 +83,7 @@ if (!is_null($events['events'])) {			//ตรวจสอบว่ามีข�
 				if($sum>select($id,$table,"NET")){
 					$replytext="คุณ ".$res['displayName']." ยอดเงินไม่เพียงพอ มียอดเหลือ ".select($id,$table,"NET")." บาท";
 				}
-				elseif($back>0&&$back<=$max){
+				elseif($back>=0&&$back<=$max){
 					$replytext=updatedragontiger($id,"มังกร",$back);
 				}
 				else{
@@ -96,7 +96,7 @@ if (!is_null($events['events'])) {			//ตรวจสอบว่ามีข�
 				if($sum>select($id,$table,"NET")){
 					$replytext="คุณ ".$res['displayName']." ยอดเงินไม่เพียงพอ มียอดเหลือ ".select($id,$table,"NET")." บาท";
 				}
-				elseif($back>0&&$back<=$max){
+				elseif($back>=0&&$back<=$max){
 					$replytext=updatedragontiger($id,"เสมอ",$back);
 				}
 				else{
