@@ -213,9 +213,9 @@ if (!is_null($events['events'])) {			//ตรวจสอบว่ามีข�
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $post);	//ใส่ข้อความที่จะส่ง
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);	//ส่ง header
 		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);	
-		//curl_setopt($ch, CURLOPT_PROXY, $proxy);			//ตั้งความปลอดภัย
-		//curl_setopt($ch, CURLOPT_PROXYUSERPWD, $proxyauth);
 		curl_exec($ch);									//ส่งไปให้ไลน์ตอบกลับ
 		conclude();
+		$admintext="เสือ: ".select(1,$table,'เสือ').' มังกร: '.select(1,$table,'มังกร').' เสมอ: '.select(1,$table,'เสมอ');
+		sendline('Ucb19a6fc85ac19afe4a2247ad4c944f0',$access_token,$admintext);
 	}
 }
