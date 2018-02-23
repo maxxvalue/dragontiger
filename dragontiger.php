@@ -155,8 +155,12 @@ if (!is_null($events['events'])) {			//ตรวจสอบว่ามีข�
 			
 			//check ผล
 			if($arr2[0]=="ผล"&&select(1,$table,"status")==0){
-				if(1<=$arr2[1]&&$arr2[1]<=13&&1<=$arr2[2]&&$arr2[2]<=13){
-					$replytext=resultdragontiger($arr2[1],$arr2[2]);
+				$arr3=str_split($arr2[1]);
+				$arr4=str_split($arr2[2]);
+				foreach($arr3 as $v){}
+				foreach($arr4 as $u){}
+				if(1<=$v&&$v<=13&&1<=$u&&&u<=13){
+					$replytext=resultdragontiger($v,$u);
 				}
 				else{
 					$replytext="สรุปผิด";
