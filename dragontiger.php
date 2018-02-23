@@ -158,6 +158,9 @@ if (!is_null($events['events'])) {			//ตรวจสอบว่ามีข�
 				if(1<=$arr2[1]&&$arr2[1]>=13&&1<=$arr2[2]&&$arr2[2]>=13){
 					$replytext=resultdragontiger($arr2[1],$arr2[2]);
 				}
+				else{
+					$replytext="สรุปผิด";
+				}
 			}
 		}
 		
