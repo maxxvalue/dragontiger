@@ -159,13 +159,13 @@ if (!is_null($events['events'])) {			//ตรวจสอบว่ามีข�
 				$arr4=str_split($arr2[2]);
 				foreach($arr3 as $n=>$v){
 					if($v>=0){
-						$v=substr($arr3,$n);
+						$v=substr($arr2[1],$n);
 						break;
 					}
 				}
 				foreach($arr4 as $n=>$u){
 					if($v>=0){
-						$v=substr($arr4,$n);
+						$v=substr($arr2[1],$n);
 						break;
 					}
 				}
