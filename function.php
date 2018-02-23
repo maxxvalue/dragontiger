@@ -34,7 +34,6 @@ function insert($table,$name,$lineid,$NET){				//เพิ่มค่ามา�
 	VALUES ('$name','$lineid',$NET)";
 	$con->query($sql);
 }
-
 function codename($text){				//ฟังก์ชั่นปรับค่าชื่อให้มี \
 	$backs=array();						//สร้าง backs ให้เป็น array
 	$text2=json_encode($text);			//แปลงค่า text ให้กลายเป็น json
@@ -83,7 +82,6 @@ function config($access_token,$groupid,$table){						//ปรับชื่อ�
 		update($row['ID'],$table,"Name",codename($r['displayName']));
 	}
 }
-
 function clear($text){   //ลบอักขระช่องว่างและอักขระเอ็นเตอร์
 	$search=array(" ","
 ");
@@ -123,6 +121,7 @@ function updatedragontiger($id,$column,$bet){
 			$rtext="คุณ ".json_decode($row["Name"],true)." เปลี่ยนจากแทง $i $v บาท เป็นแทง $bet บาท";
 			update($id,"dragontiger",$i,$bet);
 		}
+		$n++;
 	}
 	return $rtext;
 }
