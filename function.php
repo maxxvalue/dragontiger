@@ -154,12 +154,13 @@ function resultdragontiger($f,$s){
 	while($row = $result->fetch_assoc()){
 		if($row['play']==1){
 			$n=0;
-			foreach($row as $i=>$v){
+			foreach($row as $v){
 				if($n==7&&$v!=0){
 					if($arr[0]==1){
 						$money+=$v;
 						$row['NET']+=$money;
 						update($row['ID'],'dragontiger','NET',$row['NET']);
+						update($id,'dragontiger','เสือ',0);
 						$rtext.="คุณ ".json_decode($row['Name'],true)." ได้ $money บาท ยอดรวม ".$row['NET'].' บาท
 ';
 					}
@@ -167,6 +168,7 @@ function resultdragontiger($f,$s){
 						$money-=$v;
 						$row['NET']+=$money;
 						update($row['ID'],'dragontiger','NET',$row['NET']);
+						update($id,'dragontiger','เสือ',0);
 						$rtext.="คุณ ".json_decode($row['Name'],true)." เสีย $money บาท ยอดรวม ".$row['NET'].' บาท
 ';
 					}
@@ -176,6 +178,7 @@ function resultdragontiger($f,$s){
 						$money+=$v;
 						$row['NET']+=$money;
 						update($row['ID'],'dragontiger','NET',$row['NET']);
+						update($id,'dragontiger','มังกร',0);
 						$rtext.="คุณ ".json_decode($row['Name'],true)." ได้ $money บาท ยอดรวม ".$row['NET'].' บาท
 ';
 					}
@@ -183,6 +186,7 @@ function resultdragontiger($f,$s){
 						$money-=$v;
 						$row['NET']+=$money;
 						update($row['ID'],'dragontiger','NET',$row['NET']);
+						update($id,'dragontiger','มังกร',0);
 						$rtext.="คุณ ".json_decode($row['Name'],true)." เสีย $money บาท ยอดรวม ".$row['NET'].' บาท
 ';
 					}
@@ -192,6 +196,7 @@ function resultdragontiger($f,$s){
 						$money+=$v*8;
 						$row['NET']+=$money;
 						update($row['ID'],'dragontiger','NET',$row['NET']);
+						update($id,'dragontiger','เสมอ',0);
 						$rtext.="คุณ ".json_decode($row['Name'],true)." ได้ $money บาท ยอดรวม ".$row['NET'].' บาท
 ';
 					}
@@ -199,6 +204,7 @@ function resultdragontiger($f,$s){
 						$money-=$v;
 						$row['NET']+=$money;
 						update($row['ID'],'dragontiger','NET',$row['NET']);
+						update($id,'dragontiger','เสมอ',0);
 						$rtext.="คุณ ".json_decode($row['Name'],true)." เสีย $money บาท ยอดรวม ".$row['NET'].' บาท
 ';
 					}
