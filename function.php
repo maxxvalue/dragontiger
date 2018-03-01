@@ -203,7 +203,7 @@ function updatedragontiger($id,$text){
 		update($id,$table,'เสมอ',$b1);
 	}
 	else{
-		$reply="❌รูปแบบการแทงผิด❌";
+		return 1;
 	}
 	$reply="คุณ ".json_decode($row['Name'],true).'
 '.$reply.'คงเหลือ '.$row['NET'].' บาท';
