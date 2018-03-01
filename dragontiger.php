@@ -1,5 +1,5 @@
 <?php
-$table="dragontiger";	//ตั้งค่าตัวแปร
+$table="dragontigerdb";	//ตั้งค่าตัวแปร
 $max=200;
 $access_token = 'SIkXpp6ylNgQ42HEg2wkOD9hG7YRkzHbsORCxZ3p9iWLynhB9/t7hD9zdoMdUbXYqaibnclBOqZUfj+jLpWyuwWRGpvWd2hMaZvRf+2LyXbbRi9SDZrlRfGcWm6w3ry+fatBxeFmvx4S0zjEzvvFFAdB04t89/1O/w1cDnyilFU=';
 
@@ -40,83 +40,31 @@ if (!is_null($events['events'])) {			//ตรวจสอบว่ามีข�
 		$sum=sum($id);
 		$arr=str_split($text);						//แยกการรับค่ามาทีละตัวเก็บไว้ใน arr
 		//คำสั่งลงทะเบียน
-		if($text=="พร้อม"&&$id==0){
+		if(($text=="play"||$text=='Play')&&$id==0){
 			$var=codename($res['displayName']);
 			insert($table,$var,$lineid,1000);
-			$replytext="คุณ ".$res['displayName']." พร้อมเล่นแล้ว";
+			$replytext="คุณ ".$res['displayName']." ลงทะเบียนแล้ว";
 		}
 		//ถ้าลงทะเบียนแล้วก็ให้บอกว่าพร้อมเล่น
-		elseif($text=="พร้อม"&&$id!=0){
+		elseif(($text=="play"||$text=='Play')&&$id!=0){
 			$replytext="คุณ ".$res['displayName']." พร้อมเล่นแล้ว";
 		}
 		//ถ้ายังไม่ลงทะเบียนให้บอทแจ้งทุกข้อความ ว่าให้ลงทะเบียนก่อน
 		elseif($id==0){
-			$replytext="คุณ ".$res['displayName']." กรุณาพิม พร้อม";
+			$replytext="คุณ ".$res['displayName']." กรุณาพิม play";
 		}
-		if(($arr[0]=="b"||$arr[0]=="B")&&select(1,$table,"status")==1){
-			//แยกตัวหน้าและหลัง '-' ไว้ในตัวแปร front และ back
-			foreach($arr as $n => $v){
-				if($v=='-'){
-					$i=$n;
-				}
-			}
-			$front=substr($text,1,$i-1);
-			$back=substr($text,$i+1); 
-			$sum+=$back;
-			//switch ตรวจสอบค่าแบบรับค่าหลายตัว
-			switch($front){
-				//case เสือ
-				case 1:
-				if($sum>select($id,$table,"NET")){
-					$replytext="คุณ ".$res['displayName']." ยอดเงินไม่เพียงพอ มียอดเหลือ ".select($id,$table,"NET")." บาท";
-				}
-				elseif($back>=0&&$back<=$max){
-					$replytext=updatedragontiger($id,"เสือ",$back);
-				}
-				else{
-					$replytext="คุณ ".$res['displayName'].$wrong;
-				}
-				break;
-				
-				//case มังกร
-				case 2:
-				if($sum>select($id,$table,"NET")){
-					$replytext="คุณ ".$res['displayName']." ยอดเงินไม่เพียงพอ มียอดเหลือ ".select($id,$table,"NET")." บาท";
-				}
-				elseif($back>=0&&$back<=$max){
-					$replytext=updatedragontiger($id,"มังกร",$back);
-				}
-				else{
-					$replytext="คุณ ".$res['displayName'].$wrong;
-				}
-				break;
-				
-				//case เสมอ
-				case 0:
-				if($sum>select($id,$table,"NET")){
-					$replytext="คุณ ".$res['displayName']." ยอดเงินไม่เพียงพอ มียอดเหลือ ".select($id,$table,"NET")." บาท";
-				}
-				elseif($back>=0&&$back<=$max){
-					$replytext=updatedragontiger($id,"เสมอ",$back);
-				}
-				else{
-					$replytext="คุณ ".$res['displayName'].$wrong;
-				}
-				break;
-				
-				//case ปกติให้ตอบกลับไปว่าผิด
-				default:
-				$replytext="คุณ ".$res['displayName'].$wrong;
-				break;
-			}
+		if(($arr[0]=="t"||$arr[0]=="T")&&select(1,$table,"status")==1){
+			//ขึ้นด้วย t คือเริ่มแทง
+			$var=substr($text,1);
+			$replytext=updatedragontiger($id,$var);
 		}
 		
 		//ส่งข้อความให้ admin
-		if(select(1,$table,'status')==1){
+		/*if(select(1,$table,'status')==1){
 			conclude();
 			$admintext="เสือ: ".select(1,$table,'เสือ').' มังกร: '.select(1,$table,'มังกร').' เสมอ: '.select(1,$table,'เสมอ');
 			sendline('Ucb19a6fc85ac19afe4a2247ad4c944f0',$access_token,$admintext);
-		}
+		}*/
 		
 		//คำสั่งเฉพาะ admin
 		if(select($id,$table,"admin")==1){				
@@ -164,27 +112,28 @@ if (!is_null($events['events'])) {			//ตรวจสอบว่ามีข�
 			//check ผล
 			$number=array(1,2,3,4,5,6,7,8,9,10,11,12,13);
 			if($arr2[0]=="ผล"&&select(1,$table,"status")==0){
-				$arr3=str_split($arr2[1]);
-				$arr4=str_split($arr2[2]);
-				foreach($arr3 as $n=>$v){
-					if(in_array($v,$variable)){
-						$v=substr($arr2[1],$n);
-						
+				$num=array('0','1','2','3','4','5','6','7','8','9');
+				$arr=explode(',',$text);
+				$var_f=substr($arr[0],1);
+				$vara_f=str_split($var_f);
+				$var_b=$arr[1];
+				$vara_b=str_split($var_b);
+				foreach($vara_f as $n=>$v){
+					if(!in_array($v,$num)){
+						$i=$n;
 						break;
 					}
 				}
-				foreach($arr4 as $n=>$u){
-					if(in_array($u,$variable)){
-						$u=substr($arr2[2],$n);
+				$front1=substr($var_f,0,$i);
+				$front2=substr($var_f,$i);
+				foreach($vara_b as $n=>$v){
+					if(!in_array($v,$num)){
+						$i=$n;
 						break;
 					}
 				}
-				if(1<=$v&&$v<=13&&1<=$u&&$u<=13){
-					$replytext=resultdragontiger($v,$u);
-				}
-				else{
-					$replytext="สรุปผิด";
-				}
+				$back1=substr($var_b,0,$i);
+				$back2=substr($var_b,$i);
 			}
 		}
 		
