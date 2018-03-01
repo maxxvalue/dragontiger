@@ -105,6 +105,7 @@ function sum($id,$table){
 }
 function updatedragontiger($id,$text){
 	global $con;
+	$table='dragontigerdb';
 	$sql="SELECT * FROM dragontigerdb WHERE ID=$id";
 	$result=$con->query($sql);
 	$row = $result->fetch_assoc();
