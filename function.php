@@ -196,7 +196,7 @@ function updatedragontiger($id,$text){
 			}
 		}
 	}
-	elseif($f1=='0'&&$b1!=''){
+	elseif($f1==3&&$b1!=''){
 		update($id,$table,'play',1);
 		$reply.="➡️แทง ⚖️เสมอ $b1 บาท
 ";
