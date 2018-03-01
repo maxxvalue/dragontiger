@@ -25,7 +25,7 @@ function select($id,$table,$column){		//ฟังก์ชั่นคืนค�
 }
 function update($id,$table,$column,$text){	//เปลี่ยนค่าใน database
 	global $con;
-	$sql = "UPDATE $table SET $column='$text' WHERE id=$id";
+	$sql = "UPDATE $table SET $column='$text' WHERE ID=$id";
 	$con->query($sql);
 }
 function insert($table,$name,$lineid,$NET){				//เพิ่มค่ามาใน database
@@ -88,9 +88,9 @@ function clear($text){   //ลบอักขระช่องว่างแ�
 	$reply=str_replace($search,"",$text);
 	return $reply;
 }
-function sum($id){
+function sum($id,$table){
 	global $con;
-	$sql="SELECT * FROM highlow WHERE ID=2";
+	$sql="SELECT * FROM $table WHERE ID=2";
 	$result=$con->query($sql);
 	$row = $result->fetch_assoc();
 	$sum=0;
@@ -103,40 +103,114 @@ function sum($id){
 	}
 	return $sum;
 }
-function updatedragontiger($id,$column,$bet){
+function updatedragontiger($id,$text){
 	global $con;
-	$sql="SELECT * FROM dragontiger WHERE ID=$id";
+	$sql="SELECT * FROM dragontigerdb WHERE ID=$id";
 	$result=$con->query($sql);
 	$row = $result->fetch_assoc();
-	update($id,"dragontiger","มังกร",0);
-	update($id,"dragontiger","เสือ",0);
-	update($id,"dragontiger","เสมอ",0);
-	$n=0;
-	foreach($row as $i=>$v){
-		if($n>=7&&$i==$column&&$row['เสือ']!=0){
-			$rtext="คุณ ".json_decode($row["Name"],true)." เปลี่ยนจากแทง เสือ เป็นแทง $i $bet บาท ยอดเดิม ".$row['NET']." บาท ";
-			update($id,"dragontiger",$i,$bet);
-		}
-		elseif($n>=7&&$i==$column&&$row['มังกร']!=0){
-			$rtext="คุณ ".json_decode($row["Name"],true)." เปลี่ยนจากแทง มังกร เป็นแทง $i $bet บาท ยอดเดิม ".$row['NET']." บาท ";
-			update($id,"dragontiger",$i,$bet);
-		}
-		elseif($n>=7&&$i==$column&&$row['เสมอ']!=0){
-			$rtext="คุณ ".json_decode($row["Name"],true)." เปลี่ยนจากแทง เสมอ เป็นแทง $i $bet บาท ยอดเดิม ".$row['NET']." บาท ";
-			update($id,"dragontiger",$i,$bet);
-		}
-		elseif($n>=7&&$i==$column&&($v==0||$v==$bet)){
-			$rtext="คุณ ".json_decode($row["Name"],true)." แทง $i $bet บาท ยอดเดิม ".$row['NET']." บาท";
-			update($id,"dragontiger",$i,$bet);
-		}
-		$n++;
+	$arr=explode('-',$text);
+	$arr_f=str_split($arr[0]);
+	$f1=substr($arr[0],0,1);
+	$f2=substr($arr[0],1,9);
+	$f3=substr($arr[0],10);
+	$var_b=explode(',',$arr[1]);
+	$b1=$var_b[0];
+	$b2=$var_b[1];
+	$b3=$var_b[2];
+	$reply="";
+	$var0=array('0',1,2);
+	$right=0;
+	if($row['play']!=0&&in_array($arr[0],$var0)&&$arr[1]!=''){
+		cleartable($id);
 	}
-	update($id,'dragontiger','play',1);
-	return $rtext;
+	if($f1==1&&$b1!=''){////
+		update($id,$table,'play',1);
+		$reply.="➡️แทง 🐯เสือ $b1 บาท
+";
+		update($id,$table,'เสือ',$b1);
+		if($f2=="คู่"&&$b2!=''){////
+			$reply.="➡️แทง ♊คู่ ฝั่ง 🐯เสือ $b2 บาท
+";
+			update($id,$table,'เสือคู่',$b2);
+			if($f3=="ดำ"&&$b3!=''){////
+				$reply.="➡️แทง ⚫ดำ ฝั่ง 🐯เสือ $b3 บาท
+";
+				update($id,$table,'เสือดำ',$b3);
+			}
+			elseif($f3=="แดง"&&$b3!=''){////
+				$reply.="➡️แทง 🔴แดง ฝั่ง 🐯เสือ $b3 บาท
+";
+				update($id,$table,'เสือแดง',$b3);
+			}
+		}
+		elseif($f2=="คี่"&&$b2!=''){////
+			$reply.="➡️แทง 🔯คี่ ฝั่ง 🐯เสือ $b2 บาท
+";
+			update($id,$table,'เสือคี่',$b2);
+			if($f3=="ดำ"&&$b3!=''){////
+				$reply.="➡️แทง ⚫ดำ ฝั่ง 🐯เสือ $b3 บาท
+";
+				update($id,$table,'เสือดำ',$b3);
+			}
+			elseif($f3=="แดง"&&$b3!=''){////
+				$reply.="➡️แทง 🔴แดง ฝั่ง 🐯เสือ $b3 บาท
+";
+				update($id,$table,'เสือแดง',$b3);
+			}
+		}
+	}
+	elseif($f1==2&&$b1!=''){////
+		update($id,$table,'play',1);
+		$reply.="➡️แทง 🐲มังกร $b1 บาท
+";
+		update($id,$table,'มังกร',$b1);
+		if($f2=="คู่"&&$b2!=''){////
+			$reply.="➡️แทง ♊คู่ ฝั่ง 🐲มังกร $b2 บาท
+";
+			update($id,$table,'มังกรคู่',$b2);
+			if($f3=="ดำ"&&$b3!=''){////
+				$reply.="➡️แทง ⚫ดำ ฝั่ง 🐲มังกร $b3 บาท
+";
+				update($id,$table,'มังกรดำ',$b3);
+			}
+			elseif($f3=="แดง"&&$b3!=''){////
+				$reply.="➡️แทง 🔴แดง ฝั่ง 🐲มังกร $b3 บาท
+";
+				update($id,$table,'มังกรแดง',$b3);
+			}
+		}
+		elseif($f2=="คี่"&&$b2!=''){////
+			$reply.="➡️แทง 🔯คี่ ฝั่ง 🐲มังกร $b2 บาท
+";
+			update($id,$table,'มังกรคี่',$b2);
+			if($f3=="ดำ"&&$b3!=''){////
+				$reply.="➡️แทง ⚫ดำ ฝั่ง 🐲มังกร $b3 บาท
+";
+				update($id,$table,'มังกรดำ',$b3);
+			}
+			elseif($f3=="แดง"&&$b3!=''){////
+				$reply.="➡️แทง 🔴แดง ฝั่ง 🐲มังกร $b3 บาท
+";
+				update($id,$table,'มังกรแดง',$b3);
+			}
+		}
+	}
+	elseif($f1=='0'&&$b1!=''){
+		update($id,$table,'play',1);
+		$reply.="➡️แทง ⚖️เสมอ $b1 บาท
+";
+		update($id,$table,'เสมอ',$b1);
+	}
+	else{
+		$reply="❌รูปแบบการแทงผิด❌";
+	}
+	$reply="คุณ ".json_decode($row['Name'],true).'
+'.$reply.'คงเหลือ '.$row['NET'].' บาท';
+	return $reply;
 }
 function resultdragontiger($f,$s){
 	global $con;
-	$sql="SELECT * FROM dragontiger";
+	$sql="SELECT * FROM dragontigerdb";
 	$result=$con->query($sql);
 	$row = $result->fetch_assoc();
 	$arr=array("0","0","0");
@@ -159,16 +233,16 @@ function resultdragontiger($f,$s){
 					if($arr[0]==1){
 						$money+=$v;
 						$row['NET']+=$money;
-						update($row['ID'],'dragontiger','NET',$row['NET']);
-						update($row['ID'],'dragontiger','เสือ',0);
+						update($row['ID'],'dragontigerdb','NET',$row['NET']);
+						update($row['ID'],'dragontigerdb','เสือ',0);
 						$rtext.="คุณ ".json_decode($row['Name'],true)." ได้ $money บาท ยอดรวม ".$row['NET'].' บาท
 ';
 					}
 					else{
 						$money-=$v;
 						$row['NET']+=$money;
-						update($row['ID'],'dragontiger','NET',$row['NET']);
-						update($row['ID'],'dragontiger','เสือ',0);
+						update($row['ID'],'dragontigerdb','NET',$row['NET']);
+						update($row['ID'],'dragontigerdb','เสือ',0);
 						$rtext.="คุณ ".json_decode($row['Name'],true)." เสีย $money บาท ยอดรวม ".$row['NET'].' บาท
 ';
 					}
@@ -177,16 +251,16 @@ function resultdragontiger($f,$s){
 					if($arr[1]==1){
 						$money+=$v;
 						$row['NET']+=$money;
-						update($row['ID'],'dragontiger','NET',$row['NET']);
-						update($row['ID'],'dragontiger','มังกร',0);
+						update($row['ID'],'dragontigerdb','NET',$row['NET']);
+						update($row['ID'],'dragontigerdb','มังกร',0);
 						$rtext.="คุณ ".json_decode($row['Name'],true)." ได้ $money บาท ยอดรวม ".$row['NET'].' บาท
 ';
 					}
 					else{
 						$money-=$v;
 						$row['NET']+=$money;
-						update($row['ID'],'dragontiger','NET',$row['NET']);
-						update($row['ID'],'dragontiger','มังกร',0);
+						update($row['ID'],'dragontigerdb','NET',$row['NET']);
+						update($row['ID'],'dragontigerdb','มังกร',0);
 						$rtext.="คุณ ".json_decode($row['Name'],true)." เสีย $money บาท ยอดรวม ".$row['NET'].' บาท
 ';
 					}
@@ -195,32 +269,32 @@ function resultdragontiger($f,$s){
 					if($arr[2]==1){
 						$money+=$v*8;
 						$row['NET']+=$money;
-						update($row['ID'],'dragontiger','NET',$row['NET']);
-						update($row['ID'],'dragontiger','เสมอ',0);
+						update($row['ID'],'dragontigerdb','NET',$row['NET']);
+						update($row['ID'],'dragontigerdb','เสมอ',0);
 						$rtext.="คุณ ".json_decode($row['Name'],true)." ได้ $money บาท ยอดรวม ".$row['NET'].' บาท
 ';
 					}
 					else{
 						$money-=$v;
 						$row['NET']+=$money;
-						update($row['ID'],'dragontiger','NET',$row['NET']);
-						update($row['ID'],'dragontiger','เสมอ',0);
+						update($row['ID'],'dragontigerdb','NET',$row['NET']);
+						update($row['ID'],'dragontigerdb','เสมอ',0);
 						$rtext.="คุณ ".json_decode($row['Name'],true)." เสีย $money บาท ยอดรวม ".$row['NET'].' บาท
 ';
 					}
 				}
 				$n++;
 			}
-			update($row['ID'],'dragontiger','play',0);
+			update($row['ID'],'dragontigerdb','play',0);
 		}
 	}
-	$rtext='สรุปรอบที่ '.select(1,'dragontiger','NET').'
+	$rtext='สรุปรอบที่ '.select(1,'dragontigerdb','NET').'
 '.$rtext;
 	return $rtext;
 }
 function conclude(){
 	global $con;
-	$sql="SELECT * FROM dragontiger";
+	$sql="SELECT * FROM dragontigerdb";
 	$result=$con->query($sql);
 	$row = $result->fetch_assoc();
 	$tiger=0;
@@ -239,9 +313,9 @@ function conclude(){
 			}
 		}
 	}
-	update(1,'dragontiger','เสือ',$tiger);
-	update(1,'dragontiger','มังกร',$dragon);
-	update(1,'dragontiger','เสมอ',$tie);
+	update(1,'dragontigerdb','เสือ',$tiger);
+	update(1,'dragontigerdb','มังกร',$dragon);
+	update(1,'dragontigerdb','เสมอ',$tie);
 }
 function sendline($lineid,$access_token,$messages){
 	$sent=[
@@ -265,4 +339,9 @@ function sendline($lineid,$access_token,$messages){
 	curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);	//ส่ง header
 	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);	
 	curl_exec($ch);									//ส่งไปให้ไลน์ตอบกลับ
+}
+function cleartable($id){
+	global $con;
+	$sql = "UPDATE dragontigerdb SET เสือ=0,เสือคู่=0,เสือคี่=0,เสือดำ=0,เสือแดง=0,มังกร=0,มังกรคู่=0,มังกรคี่=0,มังกรดำ=0,มังกรแดง=0,เสมอ=0 WHERE ID=$id";
+	$con->query($sql);
 }
