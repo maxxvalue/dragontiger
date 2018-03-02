@@ -108,6 +108,7 @@ function updatedragontiger($id,$text){
 	$var=explode('-',$text);
 	$front=$var[0];
 	$bet=$var[1];
+	update($id,$table,'play',1);
 	if($front==1){
 		update($id,$table,'เสือ',$bet);
 	}
