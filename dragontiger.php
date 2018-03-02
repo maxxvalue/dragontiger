@@ -15,11 +15,6 @@ if (!is_null($events['events'])) {			//ตรวจสอบว่ามีข�
 		$lineid=$event['source']['userId'];	//รับค่า userId จากไลน์เก็บไว้ในตัวแปร lineid
 		$groupid=$event['source']['groupId'];//รับค่า groupId จากไลน์เก็บไว้ในตัวแปร groupid
 		$wrong=" ❌รูปแบบการแทงผิด❌";							//สร้างข้อความถ้าเกินพิมพ์พนันผิด
-		$status=select(1,$table,"status");	//รับค่า status
-		$lap=select(1,$table,"NET");	//รับค่ารอบที่
-		$admin=select($id,$table,"admin"); //รับค่า admin
-		$sarop=select(1,$table,"admin");	//รับค่าว่าสรุปยัง
-		$poll=select(1,$table,'play');		//รับค่าผลการสรุป
 		
 		$url='https://api.line.me/v2/bot/profile/'.$lineid;	//กำหนด url เพื่อเตรียมส่งรับค่า profile
 		$headers=array('Authorization: Bearer ' . $access_token);//กำหนด headers เพื่อเตรียมรับค่า profile
@@ -42,6 +37,11 @@ if (!is_null($events['events'])) {			//ตรวจสอบว่ามีข�
 			$res=json_decode($result,true);				//แก้ json เป็น array
 		}
 		$id=getid($lineid,$table);					//เรียกฟังก์ชั่น เพื่อหา id จาก lineid
+		$status=select(1,$table,"status");	//รับค่า status
+		$lap=select(1,$table,"NET");	//รับค่ารอบที่
+		$admin=select($id,$table,"admin"); //รับค่า admin
+		$sarop=select(1,$table,"admin");	//รับค่าว่าสรุปยัง
+		$poll=select(1,$table,'play');		//รับค่าผลการสรุป
 		$arr=str_split($text);						//แยกการรับค่ามาทีละตัวเก็บไว้ใน arr
 		//คำสั่งลงทะเบียน
 		if(($text=="play"||$text=='Play')&&$id==0){
@@ -61,18 +61,22 @@ if (!is_null($events['events'])) {			//ตรวจสอบว่ามีข�
 		if(($arr[0]=="t"||$arr[0]=="T")&&$status==1){
 			$var=substr($text,1);
 			$replytext=updatedragontiger($id,$var);
-			$replytext=check($id);
 			if($replytext==1){
 				$replytext='คุณ '.$res['displayName']." ❌รูปแบบการแทงผิด❌";
+			}
+			else{
+				$replytext=check($id);
 			}
 		}
 		//ขึ้นด้วย x คือลบออก
 		if(($arr[0]=="x"||$arr[0]=="X")&&$status==1){
 			$var=substr($text,1);
 			$replytext=cancledragontiger($id,$var);
-			$replytext=check($id);
 			if($replytext==1){
 				$replytext='คุณ '.$res['displayName']." ❌รูปแบบการแทงผิด❌";
+			}
+			else{
+				$replytext=check($id);
 			}
 		}
 		//ส่งข้อความให้ admin
