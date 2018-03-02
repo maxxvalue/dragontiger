@@ -60,8 +60,8 @@ if (!is_null($events['events'])) {			//ตรวจสอบว่ามีข�
 		//ขึ้นด้วย t คือเริ่มแทง
 		if(($arr[0]=="t"||$arr[0]=="T")&&$status==1){
 			$var=substr($text,1);
-			$replytext=updatedragontiger($id,$var);
-			if($replytext==1){
+			$ans=updatedragontiger($id,$var);
+			if($ans==1){
 				$replytext='คุณ '.$res['displayName']." ❌รูปแบบการแทงผิด❌";
 			}
 			else{
@@ -71,13 +71,17 @@ if (!is_null($events['events'])) {			//ตรวจสอบว่ามีข�
 		//ขึ้นด้วย x คือลบออก
 		if(($arr[0]=="x"||$arr[0]=="X")&&$status==1){
 			$var=substr($text,1);
-			$replytext=cancledragontiger($id,$var);
-			if($replytext==1){
+			$ans=cancledragontiger($id,$var);
+			if($ans==1){
 				$replytext='คุณ '.$res['displayName']." ❌รูปแบบการแทงผิด❌";
 			}
 			else{
 				$replytext=check($id);
 			}
+		}
+		//check
+		if($text=='check'){
+			$replytext=check($id);
 		}
 		//ส่งข้อความให้ admin
 		/*if($status==1){
