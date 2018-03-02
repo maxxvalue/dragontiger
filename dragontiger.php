@@ -13,7 +13,7 @@ if (!is_null($events['events'])) {			//ตรวจสอบว่ามีข�
 	$messages = [
 			[
 			'type' => 'text',
-			'text' => $replytext
+			'text' => 'hello'
 			]
 		];
 	$url = 'https://api.line.me/v2/bot/message/reply';		//url สำหรับตอบกลับ
