@@ -159,15 +159,18 @@ if (!is_null($events['events'])) {			//ตรวจสอบว่ามีข�
 			if(($arr[0]=="s"||$arr[0]=="S")&&$status==0){
 				$var=substr($text,1);
 				$replytext='ยืนยันการสรุปผลหรือไม่❓';
-				update(1,$table,'play',$var);
-				update(1,$table,'NET',$row['NET']+1);
-				update(1,$table,'admin',0);
+				if($replytext!='❌สรุปผิด❌'){
+					update(1,$table,'play',$var);
+				}
 			}
 			if($text=='@ok'&&$poll!=0){
 				$replytext=resultdragontiger($poll);
 				update(1,$table,'play',0);
 				update(1,$table,'NET',$row['NET']+1);
 				update(1,$table,'admin',0);
+			}
+			elseif($text=='@ok'&&$poll==0){
+				$replytext='❌กรุณาสรุปใหม่❌';
 			}
 		}
 		
