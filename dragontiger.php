@@ -6,14 +6,14 @@ $events = json_decode($content, true);			//แก้ระหัส json ที�
 if (!is_null($events['events'])) {			//ตรวจสอบว่ามีข้อมูลส่งมาหรือไม่
 	foreach ($events['events'] as $event) {		//วนลูปใน array ทีละตัว
 	$replyToken = $event['replyToken'];	//รับค่า  replyToken เพื่อรอส่งกลับ
-	$type=$event['messages']['type'];
-	$packageId=$event['messages']['packageId'];
-	$stickerId=$event['messages']['stickerId'];
+	$type=$event['message']['type'];
+	$packageId=$event['message']['packageId'];
+	$stickerId=$event['message']['stickerId'];
 	$replytext="$type $packageId $stickerId";
 	$messages = [
 			[
 			'type' => 'text',
-			'text' => 'hello'
+			'text' => $replytext
 			]
 		];
 	$url = 'https://api.line.me/v2/bot/message/reply';		//url สำหรับตอบกลับ
