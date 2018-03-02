@@ -1,19 +1,14 @@
 <?php
+require('dragontiger/function.php');
 $table="dragontigerdb";	//ตั้งค่าตัวแปร
 $max=200;
 $access_token = 'SIkXpp6ylNgQ42HEg2wkOD9hG7YRkzHbsORCxZ3p9iWLynhB9/t7hD9zdoMdUbXYqaibnclBOqZUfj+jLpWyuwWRGpvWd2hMaZvRf+2LyXbbRi9SDZrlRfGcWm6w3ry+fatBxeFmvx4S0zjEzvvFFAdB04t89/1O/w1cDnyilFU=';
 
-$content = file_get_contents('php://input');		//รับค่าจากล่องข้อความใน line
-$events = json_decode($content, true);			//แก้ระหัส json ที่ line ส่งมา
-require('function.php');				//เรียกฟังก์ชั่นที่สร้างไว้
-if (!is_null($events['events'])) {			//ตรวจสอบว่ามีข้อมูลส่งมาหรือไม่
-	foreach ($events['events'] as $event) {		//วนลูปใน array ทีละตัว
-		$replyToken = $event['replyToken'];	//รับค่า  replyToken เพื่อรอส่งกลับ
-		$text=$event['message']['text'];	//รับค่าข้อความที่ส่งเข้ามาในตัวแปร text
-		$type=$event['message']['type'];	//รับค่า type
+		$text='';	//รับค่าข้อความที่ส่งเข้ามาในตัวแปร text
+		$type='sticker';	//รับค่า type
 		$text=clear($text);					//กำจัดเว้นวรรคและการเอ็นเตอร์
-		$lineid=$event['source']['userId'];	//รับค่า userId จากไลน์เก็บไว้ในตัวแปร lineid
-		$groupid=$event['source']['groupId'];//รับค่า groupId จากไลน์เก็บไว้ในตัวแปร groupid
+		$lineid='U19771aa780104d560be9fa04b516ed07';	//รับค่า userId จากไลน์เก็บไว้ในตัวแปร lineid
+		$groupid='';//รับค่า groupId จากไลน์เก็บไว้ในตัวแปร groupid
 		$wrong=" ❌รูปแบบการแทงผิด❌";							//สร้างข้อความถ้าเกินพิมพ์พนันผิด
 		
 		$url='https://api.line.me/v2/bot/profile/'.$lineid;	//กำหนด url เพื่อเตรียมส่งรับค่า profile
@@ -119,7 +114,7 @@ if (!is_null($events['events'])) {			//ตรวจสอบว่ามีข�
 					$replytext2="เปิดรอบที่ ".$lap;
 				}
 				else{
-					$replytext='กรุณาสรุปผลก่อน❌';
+					$replytext='❌กรุณาสรุปผลก่อน❌';
 				}
 			}
 			//ปิดรอบ
@@ -170,40 +165,4 @@ if (!is_null($events['events'])) {			//ตรวจสอบว่ามีข�
 				update(1,$table,'admin',0);
 			}
 		}
-		
-		//สร้างข้อความตอบกลับ
-		$messages = [
-			[
-			'type' => 'text',
-			'text' => $replytext
-			]
-		];
-		if($manymessage==2){
-			$messages = [
-				[
-				'type' => 'text',
-				'text' => $replytext1
-				],
-				[
-				'type' => 'text',
-				'text' => $replytext2
-				]
-			];
-		}
-		$url = 'https://api.line.me/v2/bot/message/reply';		//url สำหรับตอบกลับ
-		$data = [
-			'replyToken' => $replyToken,				//replayToken ใส่ตรงนี้
-			'messages' => $messages,
-		];
-		$post = json_encode($data);						//web สำหรับตอบกลับ
-		$headers = array('Content-Type: application/json', 'Authorization: Bearer ' . $access_token);
-														//headers สำหรับตอบกลับ
-		$ch = curl_init($url);							//เริ่ม curl 
-		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");//ปรับเป็นแบบ post
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);	
-		curl_setopt($ch, CURLOPT_POSTFIELDS, $post);	//ใส่ข้อความที่จะส่ง
-		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);	//ส่ง header
-		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);	
-		curl_exec($ch);									//ส่งไปให้ไลน์ตอบกลับ
-	}
-}
+		echo $replytext;
