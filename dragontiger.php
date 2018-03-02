@@ -163,9 +163,7 @@ if (!is_null($events['events'])) {			//ตรวจสอบว่ามีข�
 			if(($arr[0]=="s"||$arr[0]=="S")&&$status==0){
 				$var=substr($text,1);
 				$replytext='ยืนยันการสรุปผลหรือไม่❓';
-				if($replytext!='❌สรุปผิด❌'){
-					update(1,$table,'play',$var);
-				}
+				update(1,$table,'play',$var);
 			}
 			if($text=='@ok'&&$poll!=0){
 				$replytext=resultdragontiger($poll);
