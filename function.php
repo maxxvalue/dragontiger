@@ -186,9 +186,6 @@ function cancledragontiger($id,$text){
 	else{
 		return 1;
 	}
-	if($bet==0){
-		return 1;
-	}
 }
 function resultdragontiger($text){
 	global $con;
