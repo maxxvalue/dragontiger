@@ -321,7 +321,7 @@ function resultdragontiger($text){
 		}
 	}
 	else{
-		$reply='❌สรุปผิด❌';
+		$reply='❌สรุปผิด กรุณาสรุปใหม่❌';
 	}
 	return $reply;
 }
