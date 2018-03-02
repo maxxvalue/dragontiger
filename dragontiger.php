@@ -19,6 +19,7 @@ if (!is_null($events['events'])) {			//ตรวจสอบว่ามีข�
 		$lap=select(1,$table,"NET");	//รับค่ารอบที่
 		$admin=select($id,$table,"admin"); //รับค่า admin
 		$sarop=select(1,$table,"admin");	//รับค่าว่าสรุปยัง
+		$poll=select(1,$table,'play');		//รับค่าผลการสรุป
 		
 		$url='https://api.line.me/v2/bot/profile/'.$lineid;	//กำหนด url เพื่อเตรียมส่งรับค่า profile
 		$headers=array('Authorization: Bearer ' . $access_token);//กำหนด headers เพื่อเตรียมรับค่า profile
@@ -56,15 +57,24 @@ if (!is_null($events['events'])) {			//ตรวจสอบว่ามีข�
 		elseif($id==0){
 			$replytext="คุณ ".$res['displayName']." กรุณาพิมพ์ play";
 		}
+		//ขึ้นด้วย t คือเริ่มแทง
 		if(($arr[0]=="t"||$arr[0]=="T")&&$status==1){
-			//ขึ้นด้วย t คือเริ่มแทง
 			$var=substr($text,1);
 			$replytext=updatedragontiger($id,$var);
+			$replytext=check($id);
 			if($replytext==1){
 				$replytext='คุณ '.$res['displayName']." ❌รูปแบบการแทงผิด❌";
 			}
 		}
-		
+		//ขึ้นด้วย x คือลบออก
+		if(($arr[0]=="x"||$arr[0]=="X")&&$status==1){
+			$var=substr($text,1);
+			$replytext=cancledragontiger($id,$var);
+			$replytext=check($id);
+			if($replytext==1){
+				$replytext='คุณ '.$res['displayName']." ❌รูปแบบการแทงผิด❌";
+			}
+		}
 		//ส่งข้อความให้ admin
 		/*if($status==1){
 			conclude();
@@ -124,7 +134,14 @@ if (!is_null($events['events'])) {			//ตรวจสอบว่ามีข�
 			//check ผล
 			if(($arr[0]=="s"||$arr[0]=="S")&&$status==0){
 				$var=substr($text,1);
-				$replytext=resultdragontiger($var);
+				$replytext='ยืนยันการสรุปผลหรือไม่❓';
+				update(1,$table,'play',$var);
+				update(1,$table,'NET',$row['NET']+1);
+				update(1,$table,'admin',0);
+			}
+			if($text=='@ok'&&$poll!=0){
+				$replytext=resultdragontiger($poll);
+				update(1,$table,'play',0);
 				update(1,$table,'NET',$row['NET']+1);
 				update(1,$table,'admin',0);
 			}
