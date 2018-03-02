@@ -306,7 +306,7 @@ function resultdragontiger($text){
 				//สร้างข้อความสรุปผล
 				if($money>0){
 					$reply.='
-คุณ '.json_decode($row['Name'],true)." $money = ".($row['NET']+$money).' บาท';
+คุณ '.json_decode($row['Name'],true)." +$money = ".($row['NET']+$money).' บาท';
 				}
 				elseif($money<0){
 					$reply.='
