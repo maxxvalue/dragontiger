@@ -168,7 +168,7 @@ if (!is_null($events['events'])) {			//ตรวจสอบว่ามีข�
 			if($text=='@ok'&&$poll!=0){
 				$replytext=resultdragontiger($poll);
 				update(1,$table,'LineID',0);
-				update(1,$table,'NET',$row['NET']+1);
+				update(1,$table,'NET',$lap+1);
 				update(1,$table,'admin',0);
 			}
 			elseif($text=='@ok'&&$poll==0){
