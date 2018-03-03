@@ -162,7 +162,30 @@ if (!is_null($events['events'])) {			//ตรวจสอบว่ามีข�
 			//check ผล
 			if(($arr[0]=="s"||$arr[0]=="S")&&$status==0){
 				$var=substr($text,1);
-				$replytext='ยืนยันการสรุปผลหรือไม่❓';
+				$num=array('0',1,2,3,4,5,6,7,8,9,10,11,12,13);
+				$var=explode(',',$text);
+				$arr_f=str_split($var[0]);
+				$arr_b=str_split($var[1]);
+				foreach($arr_f as $n=>$v){
+					if(!in_array($v,$num)){
+						$i=$n;
+						break;
+					}
+				}
+				$nfront=substr($var[0],0,$i);
+				$tfront=substr($var[0],$i);
+				foreach($arr_b as $n=>$v){
+					if(!in_array($v,$num)){
+						$i=$n;
+						break;
+					}
+				}
+				$nback=substr($var[1],0,$i);
+				$tback=substr($var[1],$i);
+				$replytext="ยืนยันสรุป
+🐯เสือแต้ม $nfront สี $tfront
+🐉มังกรแต้ม $nback สี $tback
+หรือไม่❓";
 				update(1,$table,'LineID',$var);
 			}
 			if($text=='@ok'&&$poll!=0){
