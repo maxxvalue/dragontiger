@@ -109,37 +109,37 @@ function updatedragontiger($id,$text){
 	$front=$var[0];
 	$bet=$var[1];
 	update($id,$table,'play',1);
-	if($front=='t'){
+	if($front=='t'||$front=='T'){
 		update($id,$table,'เสือ',$bet);
 	}
-	elseif($front=='tคี่'){
+	elseif($front=='tคี่'||$front=='Tคี่'){
 		update($id,$table,'เสือคี่',$bet);
 	}
-	elseif($front=='tคู่'){
+	elseif($front=='tคู่'||$front=='Tคู่'){
 		update($id,$table,'เสือคู่',$bet);
 	}
-	elseif($front=='tดำ'){
+	elseif($front=='tดำ'||$front=='Tดำ'){
 		update($id,$table,'เสือดำ',$bet);
 	}
-	elseif($front=='tแดง'){
+	elseif($front=='tแดง'||$front=='Tแดง'){
 		update($id,$table,'เสือแดง',$bet);
 	}
-	elseif($front=='d'){
+	elseif($front=='d'||$front=='D'){
 		update($id,$table,'มังกร',$bet);
 	}
-	elseif($front=='dคู่'){
+	elseif($front=='dคู่'||$front=='Dคู่'){
 		update($id,$table,'มังกรคู่',$bet);
 	}
-	elseif($front=='dคี่'){
+	elseif($front=='dคี่'||$front=='Dคี่'){
 		update($id,$table,'มังกรคี่',$bet);
 	}
-	elseif($front=='dดำ'){
+	elseif($front=='dดำ'||$front=='Dดำ'){
 		update($id,$table,'มังกรดำ',$bet);
 	}
-	elseif($front=='dแดง'){
+	elseif($front=='dแดง'||$front=='Dแดง'){
 		update($id,$table,'มังกรแดง',$bet);
 	}
-	elseif($front=='เสมอ'){
+	elseif($front=='td'||$front=='Td'){
 		update($id,$table,'เสมอ',$bet);
 	}
 	else{
@@ -152,37 +152,37 @@ function updatedragontiger($id,$text){
 function cancledragontiger($id,$front){
 	$table='dragontigerdb';
 	$bet=0;
-	if($front=='t'){
+	if($front==1){
 		update($id,$table,'เสือ',$bet);
 	}
-	elseif($front=='tคี่'){
+	elseif($front==11){
 		update($id,$table,'เสือคี่',$bet);
 	}
-	elseif($front=='tคู่'){
+	elseif($front==12){
 		update($id,$table,'เสือคู่',$bet);
 	}
-	elseif($front=='tดำ'){
+	elseif($front==13){
 		update($id,$table,'เสือดำ',$bet);
 	}
-	elseif($front=='tแดง'){
+	elseif($front==14){
 		update($id,$table,'เสือแดง',$bet);
 	}
-	elseif($front=='d'){
+	elseif($front==2){
 		update($id,$table,'มังกร',$bet);
 	}
-	elseif($front=='dคู่'){
+	elseif($front==21){
 		update($id,$table,'มังกรคู่',$bet);
 	}
-	elseif($front=='dคี่'){
+	elseif($front==22){
 		update($id,$table,'มังกรคี่',$bet);
 	}
-	elseif($front=='dดำ'){
+	elseif($front==23){
 		update($id,$table,'มังกรดำ',$bet);
 	}
-	elseif($front=='dแดง'){
+	elseif($front==24){
 		update($id,$table,'มังกรแดง',$bet);
 	}
-	elseif($front=='เสมอ'){
+	elseif($front==3){
 		update($id,$table,'เสมอ',$bet);
 	}
 	else{
