@@ -168,9 +168,9 @@ if (!is_null($events['events'])) {			//ตรวจสอบว่ามีข�
 			
 			//check ผล
 			if(($arr[0]=="s"||$arr[0]=="S")&&$status==0){
-				$var=substr($text,1);
+				$var1=substr($text,1);
 				$num=array('0',1,2,3,4,5,6,7,8,9,10,11,12,13);
-				$var=explode(',',$text);
+				$var=explode(',',$var1);
 				$arr_f=str_split($var[0]);
 				$arr_b=str_split($var[1]);
 				foreach($arr_f as $n=>$v){
@@ -193,7 +193,7 @@ if (!is_null($events['events'])) {			//ตรวจสอบว่ามีข�
 🐯เสือแต้ม $nfront สี $tfront
 🐉มังกรแต้ม $nback สี $tback
 หรือไม่❓";
-				update(1,$table,'LineID',$var);
+				update(1,$table,'LineID',$var1);
 			}
 			elseif(($arr[0]=="s"||$arr[0]=="S")&&$status==1){
 				$replytext='❌กรุณาปิดรอบก่อน❌';
