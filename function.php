@@ -112,31 +112,31 @@ function updatedragontiger($id,$text){
 	if($front=='t'||$front=='T'){
 		update($id,$table,'เสือ',$bet);
 	}
-	elseif($front=='tคี่'||$front=='Tคี่'){
+	elseif($front=='t1'||$front=='T1'){
 		update($id,$table,'เสือคี่',$bet);
 	}
-	elseif($front=='tคู่'||$front=='Tคู่'){
+	elseif($front=='t2'||$front=='T2'){
 		update($id,$table,'เสือคู่',$bet);
 	}
-	elseif($front=='tดำ'||$front=='Tดำ'){
+	elseif($front=='tb'||$front=='Tb'){
 		update($id,$table,'เสือดำ',$bet);
 	}
-	elseif($front=='tแดง'||$front=='Tแดง'){
+	elseif($front=='tr'||$front=='Tr'){
 		update($id,$table,'เสือแดง',$bet);
 	}
 	elseif($front=='d'||$front=='D'){
 		update($id,$table,'มังกร',$bet);
 	}
-	elseif($front=='dคู่'||$front=='Dคู่'){
-		update($id,$table,'มังกรคู่',$bet);
-	}
-	elseif($front=='dคี่'||$front=='Dคี่'){
+	elseif($front=='d1'||$front=='D1'){
 		update($id,$table,'มังกรคี่',$bet);
 	}
-	elseif($front=='dดำ'||$front=='Dดำ'){
+	elseif($front=='d2'||$front=='D2'){
+		update($id,$table,'มังกรคู่',$bet);
+	}
+	elseif($front=='db'||$front=='Db'){
 		update($id,$table,'มังกรดำ',$bet);
 	}
-	elseif($front=='dแดง'||$front=='Dแดง'){
+	elseif($front=='dr'||$front=='Dr'){
 		update($id,$table,'มังกรแดง',$bet);
 	}
 	elseif($front=='td'||$front=='Td'){
