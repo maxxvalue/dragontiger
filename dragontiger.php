@@ -52,14 +52,14 @@ if (!is_null($events['events'])) {			//ตรวจสอบว่ามีข�
 			if($net>=$var[1]+sum($id,$table)){
 				$ans=updatedragontiger($id,$text);
 				if($ans==1){
-					$replytext='คุณ '.$res['displayName']." ❌รูปแบบการแทงผิด❌";
+					$replytext='❌คุณ '.$res['displayName']." รูปแบบการแทงผิด❌";
 				}
 				else{
 					$replytext=check($id);
 				}
 			}
 			else{
-				$replytext='คุณ '.$res['displayName']." ยอดเงินไม่พอ คงเหลือ $net บาท";
+				$replytext='❌คุณ '.$res['displayName']." ยอดเงินไม่พอ คงเหลือ $net บาท❌";
 			}
 		}
 		elseif(($arr[0]=="t"||$arr[0]=="T"||$arr[0]=="d"||$arr[0]=="D"||$arr1[0]=="td"||$arr1[0]=="Td")&&$status==0){
