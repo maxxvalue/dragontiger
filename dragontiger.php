@@ -164,10 +164,10 @@ td=เสมอ⚖️ 8 ต่อ';
 			if(($arr[0]=="s"||$arr[0]=="S")&&$status==0){
 				$var1=substr($text,1);
 				$var=explode(',',$var1);
-				$nfront=substr($var[0],0,1);
-				$tfront=substr($var[0],1);
-				$nback=substr($var[1],0,1);
-				$tback=substr($var[1],1);
+				$tfront=substr($var[0],0,1);
+				$nfront=substr($var[0],1);
+				$tback=substr($var[1],0,1);
+				$nback=substr($var[1],1);
 				if($tfront==1){
 					$tfront='ดำ⚫';
 				}
