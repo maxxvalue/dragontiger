@@ -80,7 +80,7 @@ if (!is_null($events['events'])) {			//ตรวจสอบว่ามีข�
 			$replytext="❌ปิดรอบแล้ว❌";
 		}
 		//check
-		if($text=='check'){
+		if($text=='check'||$text=='Check'){
 			$replytext=check($id);
 		}
 		//ส่งข้อความให้ admin
@@ -163,26 +163,23 @@ td=เสมอ⚖️ 8 ต่อ';
 			//check ผล
 			if(($arr[0]=="s"||$arr[0]=="S")&&$status==0){
 				$var1=substr($text,1);
-				$num=array('0',1,2,3,4,5,6,7,8,9,10,11,12,13);
 				$var=explode(',',$var1);
-				$arr_f=str_split($var[0]);
-				$arr_b=str_split($var[1]);
-				foreach($arr_f as $n=>$v){
-					if(!in_array($v,$num)){
-						$i=$n;
-						break;
-					}
+				$nfront=substr($var[0],0,1);
+				$tfront=substr($var[0],1);
+				$nback=substr($var[1],0,1);
+				$tback=substr($var[1],1);
+				if($tfront==1){
+					$tfront='ดำ⚫';
 				}
-				$nfront=substr($var[0],0,$i);
-				$tfront=substr($var[0],$i);
-				foreach($arr_b as $n=>$v){
-					if(!in_array($v,$num)){
-						$i=$n;
-						break;
-					}
+				elseif($tfront==2){
+					$tfront='แดง🔴';
 				}
-				$nback=substr($var[1],0,$i);
-				$tback=substr($var[1],$i);
+				if($tback==1){
+					$tback='ดำ⚫';
+				}
+				elseif($tback==2){
+					$tback='แดง🔴';
+				}
 				$replytext="ยืนยันสรุป
 🐯เสือแต้ม $nfront สี $tfront
 🐉มังกรแต้ม $nback สี $tback
