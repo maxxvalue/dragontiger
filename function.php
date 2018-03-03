@@ -200,10 +200,11 @@ function resultdragontiger($text){
 	$nfront=substr($var[0],1);
 	$tback=substr($var[1],0,1);
 	$nback=substr($var[1],1);
+	$num=array(1,2,3,4,5,6,7,8,9,10,11,12,13);
 	$res1=array('เสือ'=>0,'มังกร'=>0);
 	$res9=array('เสือคี่'=>0,'เสือคู่'=>0,'เสือดำ'=>0,'เสือแดง'=>0,'มังกรคู่'=>0,'มังกรคี่'=>0,'มังกรดำ'=>0,'มังกรแดง'=>0);
 	$res8=array('เสมอ'=>0);
-	if(in_array($nfront,$num)&&in_array($nback,$num)&&($tfront=='ดำ'||$tfront=='แดง')&&($tback=='ดำ'||$tback=='แดง')){
+	if(in_array($nfront,$num)&&in_array($nback,$num)&&($tfront==1||$tfront==2)&&($tback==1||$tback==2)){
 		//check เสือ มังกร เสมอ
 		if($nfront>$nback){
 			$res1['เสือ']=1;
