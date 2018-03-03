@@ -49,17 +49,17 @@ if (!is_null($events['events'])) {			//ตรวจสอบว่ามีข�
 		//ขึ้นด้วย t คือเริ่มแทง
 		if(($arr[0]=="t"||$arr[0]=="T"||$arr[0]=="d"||$arr[0]=="D"||$arr1[0]=="td"||$arr1[0]=="Td")&&$status==1){
 			$var=explode('-',$text);
-			if($net>=$var[1]){
+			if($net>=$var[1]+sum($id,$table)){
 				$ans=updatedragontiger($id,$text);
+				if($ans==1){
+					$replytext='คุณ '.$res['displayName']." ❌รูปแบบการแทงผิด❌";
+				}
+				else{
+					$replytext=check($id);
+				}
 			}
 			else{
 				$replytext='คุณ '.$res['displayName']." ยอดเงินไม่พอ คงเหลือ $net บาท";
-			}
-			if($ans==1){
-				$replytext='คุณ '.$res['displayName']." ❌รูปแบบการแทงผิด❌";
-			}
-			else{
-				$replytext=check($id);
 			}
 		}
 		elseif(($arr[0]=="t"||$arr[0]=="T"||$arr[0]=="d"||$arr[0]=="D"||$arr1[0]=="td"||$arr1[0]=="Td")&&$status==0){
