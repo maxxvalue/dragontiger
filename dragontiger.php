@@ -68,6 +68,9 @@ if (!is_null($events['events'])) {			//ตรวจสอบว่ามีข�
 				$replytext=check($id);
 			}
 		}
+		elseif(($arr[0]=="t"||$arr[0]=="T")&&$status==0){
+			$replytext="❌ปิดรอบแล้ว❌";
+		}
 		//ขึ้นด้วย x คือลบออก
 		if(($arr[0]=="x"||$arr[0]=="X")&&$status==1){
 			$var=substr($text,1);
@@ -78,6 +81,9 @@ if (!is_null($events['events'])) {			//ตรวจสอบว่ามีข�
 			else{
 				$replytext=check($id);
 			}
+		}
+		elseif(($arr[0]=="x"||$arr[0]=="X")&&$status==0){
+			$replytext="❌ปิดรอบแล้ว❌";
 		}
 		//check
 		if($text=='check'){
