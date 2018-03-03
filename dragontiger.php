@@ -152,7 +152,7 @@ if (!is_null($events['events'])) {			//ตรวจสอบว่ามีข�
 				update(1,$table,'admin',1);
 			}
 			//เซ็ตรอบแรก
-			if($text=="op"){
+			if($text=="op"||$text=="Op"){
 				update(1,$table,"status",0);
 				update(1,$table,"NET",1);
 				update(1,$table,'admin',0);
