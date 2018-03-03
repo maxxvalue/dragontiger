@@ -195,26 +195,11 @@ function resultdragontiger($text){
 	$sql="SELECT * FROM $table";
 	$result=$con->query($sql);
 	$row = $result->fetch_assoc();
-	$num=array('0',1,2,3,4,5,6,7,8,9,10,11,12,13);
 	$var=explode(',',$text);
-	$arr_f=str_split($var[0]);
-	$arr_b=str_split($var[1]);
-	foreach($arr_f as $n=>$v){
-		if(!in_array($v,$num)){
-			$i=$n;
-			break;
-		}
-	}
-	$nfront=substr($var[0],0,$i);
-	$tfront=substr($var[0],$i);
-	foreach($arr_b as $n=>$v){
-		if(!in_array($v,$num)){
-			$i=$n;
-			break;
-		}
-	}
-	$nback=substr($var[1],0,$i);
-	$tback=substr($var[1],$i);
+	$nfront=substr($var[0],0,1);
+	$tfront=substr($var[0],1);
+	$nback=substr($var[1],0,1);
+	$tback=substr($var[1],1);
 	$res1=array('เสือ'=>0,'มังกร'=>0);
 	$res9=array('เสือคี่'=>0,'เสือคู่'=>0,'เสือดำ'=>0,'เสือแดง'=>0,'มังกรคู่'=>0,'มังกรคี่'=>0,'มังกรดำ'=>0,'มังกรแดง'=>0);
 	$res8=array('เสมอ'=>0);
@@ -244,14 +229,14 @@ function resultdragontiger($text){
 			$res9['มังกรคี่']=1;
 		}
 		//check เสือดำ เสือแดง
-		if($tfront=='ดำ'){
+		if($tfront==1){
 			$res9['เสือดำ']=1;
 		}
 		else{
 			$res9['เสือแดง']=1;
 		}
 		//check มังกรดำ มังกรแดง
-		if($tback=='ดำ'){
+		if($tback==1){
 			$res9['มังกรดำ']=1;
 		}
 		else{
@@ -300,6 +285,7 @@ function resultdragontiger($text){
 						$row[$n]=0;
 					}
 				}
+				$money=number_format($money);
 				//ส่งไปเก็บค่าใน database
 				update($row['ID'],$table,'NET',($row['NET']+$money));
 				//เปลี่ยนเป็น 0
