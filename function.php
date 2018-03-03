@@ -196,10 +196,10 @@ function resultdragontiger($text){
 	$result=$con->query($sql);
 	$row = $result->fetch_assoc();
 	$var=explode(',',$text);
-	$nfront=substr($var[0],0,1);
-	$tfront=substr($var[0],1);
-	$nback=substr($var[1],0,1);
-	$tback=substr($var[1],1);
+	$tfront=substr($var[0],0,1);
+	$nfront=substr($var[0],1);
+	$tback=substr($var[1],0,1);
+	$nback=substr($var[1],1);
 	$res1=array('เสือ'=>0,'มังกร'=>0);
 	$res9=array('เสือคี่'=>0,'เสือคู่'=>0,'เสือดำ'=>0,'เสือแดง'=>0,'มังกรคู่'=>0,'มังกรคี่'=>0,'มังกรดำ'=>0,'มังกรแดง'=>0);
 	$res8=array('เสมอ'=>0);
