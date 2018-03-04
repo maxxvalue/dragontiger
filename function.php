@@ -202,7 +202,9 @@ function resultdragontiger($text){
 	$nback=substr($var[1],1);
 	$num=array(1,2,3,4,5,6,7,8,9,10,11,12,13);
 	$res1=array('เสือ'=>0,'มังกร'=>0);
-	$res9=array('เสือคี่'=>0,'เสือคู่'=>0,'เสือดำ'=>0,'เสือแดง'=>0,'มังกรคู่'=>0,'มังกรคี่'=>0,'มังกรดำ'=>0,'มังกรแดง'=>0);
+	$res5=array('เสือคู่'=>0,'มังกรคู่'=>0);
+	$res7=array('เสือคี่'=>0,'มังกรคี่'=>0);
+	$res9=array('เสือดำ'=>0,'เสือแดง'=>0,'มังกรดำ'=>0,'มังกรแดง'=>0);
 	$res8=array('เสมอ'=>0);
 	if(in_array($nfront,$num)&&in_array($nback,$num)&&($tfront==1||$tfront==2)&&($tback==1||$tback==2)){
 		//check เสือ มังกร เสมอ
@@ -217,17 +219,17 @@ function resultdragontiger($text){
 		}
 		//check เสือคู่ เสือคี่
 		if($nfront%2==0){
-			$res9['เสือคู่']=1;
+			$res5['เสือคู่']=1;
 		}
 		else{
-			$res9['เสือคี่']=1;
+			$res7['เสือคี่']=1;
 		}
 		//check มังกรคู่ มังกรคี่
 		if($nback%2==0){
-			$res9['มังกรคู่']=1;
+			$res5['มังกรคู่']=1;
 		}
 		else{
-			$res9['มังกรคี่']=1;
+			$res7['มังกรคี่']=1;
 		}
 		//check เสือดำ เสือแดง
 		if($tfront==1){
@@ -255,6 +257,18 @@ function resultdragontiger($text){
 						$row[$n]=0;
 					}
 				}
+				foreach($res5 as $n=>$v){
+					if($v==1&&$row[$n]!=0){
+						$money+=$row[$n]*1.05;
+						$row[$n]=0;
+					}
+				}
+				foreach($res7 as $n=>$v){
+					if($v==1&&$row[$n]!=0){
+						$money+=$row[$n]*0.75;
+						$row[$n]=0;
+					}
+				}
 				foreach($res9 as $n=>$v){
 					if($v==1&&$row[$n]!=0){
 						$money+=$row[$n]*0.9;
@@ -274,6 +288,17 @@ function resultdragontiger($text){
 						$row[$n]=0;
 					}
 					elseif($row[$n]!=0){
+						$money-=$row[$n];
+						$row[$n]=0;
+					}
+				}
+				foreach($res5 as $n=>$v){
+					if($row[$n]!=0){
+						$money-=$row[$n];
+						$row[$n]=0;
+					}
+				}foreach($res7 as $n=>$v){
+					if($row[$n]!=0){
 						$money-=$row[$n];
 						$row[$n]=0;
 					}
