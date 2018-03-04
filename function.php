@@ -269,7 +269,7 @@ function resultdragontiger($text){
 				}
 				//คิดเงินฝั่งผิด
 				foreach($res1 as $n=>$v){
-					if($row[$n]!=0&&$res8[0]==1){
+					if($row[$n]!=0&&$res8['เสมอ']==1){
 						$money-=$row[$n]/2;
 						$row[$n]=0;
 					}
