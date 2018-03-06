@@ -44,6 +44,7 @@ if (!is_null($events['events'])) {			//ตรวจสอบว่ามีข�
 		$sarop=select(1,$table,"admin");	//รับค่าว่าสรุปยัง
 		$poll=select(1,$table,'LineID');		//รับค่าผลการสรุป
 		$net=select($netid,'money','NET');	//รับค่าเงินที่มีอยู่
+		update($id,$table,'NET',$net);		//update ค่าเงิน
 		$arr=str_split($text);						//แยกการรับค่ามาทีละตัวเก็บไว้ใน arr
 		$arr1=explode('-',$text);
 		
@@ -199,7 +200,6 @@ td=เสมอ⚖️ 8 ต่อ';
 				$replytext='❌กรุณาปิดรอบก่อน❌';
 			}
 			if($text=='@ok'&&$poll!=0){
-				update($id,$table,'NET',$net);
 				$replytext=resultdragontiger($poll);
 				update($netid,'money','NET',select($id,$table,'NET'));
 				update(1,$table,'LineID',0);
