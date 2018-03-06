@@ -317,7 +317,7 @@ function resultdragontiger($text){
 				}
 				$money=number_format($money);
 				//ส่งไปเก็บค่าใน database
-				update($row['ID'],'money','NET',($row['NET']+$money));
+				update($row['ID'],$table,'NET',($row['NET']+$money));
 				//เปลี่ยนเป็น 0
 				update($row['ID'],$table,'play',0);
 				//สร้างข้อความสรุปผล
