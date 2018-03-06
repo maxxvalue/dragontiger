@@ -195,6 +195,7 @@ td=เสมอ⚖️ 8 ต่อ';
 				$replytext='❌กรุณาปิดรอบก่อน❌';
 			}
 			if($text=='@ok'&&$poll!=0){
+				update($id,$table,'NET',$net);
 				$replytext=resultdragontiger($poll);
 				update(1,$table,'LineID',0);
 				update(1,$table,'NET',$lap+1);
