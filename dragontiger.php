@@ -49,7 +49,7 @@ if (!is_null($events['events'])) {			//ตรวจสอบว่ามีข�
 		$arr1=explode('-',$text);
 		
 		if($text=='OX'){
-			$replytext="groupId:$groudid
+			$replytext="groupId:$groupid
 lineId:$lineid";
 		}
 		if(($arr[0]=="t"||$arr[0]=="T"||$arr[0]=="d"||$arr[0]=="D"||$arr1[0]=="td"||$arr1[0]=="Td")&&$status==1&&$id==0){
