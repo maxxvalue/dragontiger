@@ -48,6 +48,10 @@ if (!is_null($events['events'])) {			//ตรวจสอบว่ามีข�
 		$arr=str_split($text);						//แยกการรับค่ามาทีละตัวเก็บไว้ใน arr
 		$arr1=explode('-',$text);
 		
+		if($text=='OX'){
+			$replytext="groupId:$groudid
+lineId:$lineid";
+		}
 		if(($arr[0]=="t"||$arr[0]=="T"||$arr[0]=="d"||$arr[0]=="D"||$arr1[0]=="td"||$arr1[0]=="Td")&&$status==1&&$id==0){
 			$replytext="คุณ ".$res['displayName']." กรุณาพิม play";
 		}
