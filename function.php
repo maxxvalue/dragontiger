@@ -79,7 +79,10 @@ function config($access_token,$groupid,$table){						//ปรับชื่อ�
 			$res = curl_exec($ch);				//ส่งค่าไปให้ไลน์และรับกลับด้วยตัวแปร res
 			$r=json_decode($res,true);				//แก้ json เป็น array
 		}
-		update($row['ID'],$table,"Name",codename($r['displayName']));
+		if($r['displayName']!=''){
+			update($row['ID'],$table,"Name",codename($r['displayName']));
+			update($row['ID'],'money',"Name",codename($r['displayName']));
+		}
 	}
 }
 function clear($text){   //ลบอักขระช่องว่างและอักขระเอ็นเตอร์
