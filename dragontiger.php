@@ -220,7 +220,7 @@ td=เสมอ⚖️ 8 ต่อ';
 				$var=codename($res['displayName']);
 				insert($table,$var,$lineid,0);
 				if($netid==0){
-					insert('money',$var,$lineid,1000);
+					insert('money',$var,$lineid,0);
 				}
 				$replytext="คุณ ".$res['displayName']." ลงทะเบียนแล้ว";
 			}
