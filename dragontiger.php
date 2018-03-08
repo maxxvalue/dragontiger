@@ -216,12 +216,17 @@ td=เสมอ⚖️ 8 ต่อ';
 		}
 		//คำสั่งลงทะเบียน
 		if(($text=="play"||$text=='Play')&&$id==0){
-			$var=codename($res['displayName']);
-			insert($table,$var,$lineid,0);
-			if($netid==0){
-				insert('money',$var,$lineid,1000);
+			if($res['displayName']!=''){
+				$var=codename($res['displayName']);
+				insert($table,$var,$lineid,0);
+				if($netid==0){
+					insert('money',$var,$lineid,1000);
+				}
+				$replytext="คุณ ".$res['displayName']." ลงทะเบียนแล้ว";
 			}
-			$replytext="คุณ ".$res['displayName']." ลงทะเบียนแล้ว";
+			else{
+				$replytext="ไม่สามารถลงทะเบียนได้";
+			}
 		}
 		//ถ้าลงทะเบียนแล้วก็ให้บอกว่าพร้อมเล่น
 		elseif(($text=="play"||$text=='Play')&&$id!=0){
