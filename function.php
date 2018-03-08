@@ -9,7 +9,6 @@ function getid($lineid,$table){ 					//ฟังก์ชั่นหาค่�
 	global $con;
 	$sql = "SELECT * FROM $table";			//select ทุกค่าจาก database
 	$result = $con->query($sql);
-	$row=$result->fetch_assoc();
 	while($row=$result->fetch_assoc()){		//ไล่ทุก id
 		if($lineid==$row["LineID"]){		//ค้นหา column LineID
 			return $row["ID"];				//คืนค่า column ID
