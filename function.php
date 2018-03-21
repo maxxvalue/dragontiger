@@ -33,6 +33,13 @@ function insert($table,$name,$lineid,$NET){				//เพิ่มค่ามา�
 	$sql = "INSERT INTO $table (Name, LineID,NET)
 	VALUES ('$name','$lineid',$NET)";
 	$con->query($sql);
+	$sql="CREATE TABLE $lineid (
+	ID INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+	รายการ VARCHAR(255),
+	จำนวนเงิน INT,
+	เวลา TIMESTAMP
+	)";
+	$con->query($sql);
 }
 function codename($text){				//ฟังก์ชั่นปรับค่าชื่อให้มี \
 	$backs=array();						//สร้าง backs ให้เป็น array
