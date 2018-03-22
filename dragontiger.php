@@ -48,15 +48,15 @@ if (!is_null($events['events'])) {			//ตรวจสอบว่ามีข�
 		$arr=str_split($text);						//แยกการรับค่ามาทีละตัวเก็บไว้ใน arr
 		$arr1=explode('-',$text);
 		
-		if($text=='OX'){
+		if($text=='ox'||$text=='Ox'){
 			$replytext="groupId:$groupid
 lineId:$lineid";
 		}
-		if(($arr[0]=="t"||$arr[0]=="T"||$arr[0]=="d"||$arr[0]=="D"||$arr1[0]=="td"||$arr1[0]=="Td")&&$status==1&&$id==0){
+		if(($arr[0]=="t"||$arr[0]=="T"||$arr[0]=="d"||$arr[0]=="D"||$arr1[0]=="td"||$arr1[0]=="Td")&&$status==2&&$id==0){
 			$replytext="คุณ ".$res['displayName']." กรุณาพิม play";
 		}
 		//ขึ้นด้วย t คือเริ่มแทง
-		elseif(($arr[0]=="t"||$arr[0]=="T"||$arr[0]=="d"||$arr[0]=="D"||$arr1[0]=="td"||$arr1[0]=="Td")&&$status==1){
+		elseif(($arr[0]=="t"||$arr[0]=="T"||$arr[0]=="d"||$arr[0]=="D"||$arr1[0]=="td"||$arr1[0]=="Td")&&$status==2){
 			$var=explode('-',$text);
 			//ถ้ายังไม่ลงทะเบียนให้บอทแจ้งทุกข้อความ ว่าให้ลงทะเบียนก่อน
 			if($net>=$var[1]+sum($id,$table)){
@@ -72,11 +72,11 @@ lineId:$lineid";
 				$replytext='❌คุณ '.$res['displayName']." ยอดเงินไม่พอ คงเหลือ $net บาท❌";
 			}
 		}
-		elseif(($arr[0]=="t"||$arr[0]=="T"||$arr[0]=="d"||$arr[0]=="D"||$arr1[0]=="td"||$arr1[0]=="Td")&&$status==0){
+		elseif(($arr[0]=="t"||$arr[0]=="T"||$arr[0]=="d"||$arr[0]=="D"||$arr1[0]=="td"||$arr1[0]=="Td")&&$status==1){
 			$replytext="❌ปิดรอบแล้ว❌";
 		}
 		//ขึ้นด้วย x คือลบออก
-		if(($arr[0]=="x"||$arr[0]=="X")&&$status==1){
+		if(($arr[0]=="x"||$arr[0]=="X")&&$status==2){
 			$var=substr($text,1);
 			$ans=cancledragontiger($id,$var);
 			if($ans==1){
@@ -86,7 +86,7 @@ lineId:$lineid";
 				$replytext=check($id);
 			}
 		}
-		elseif(($arr[0]=="x"||$arr[0]=="X")&&$status==0){
+		elseif(($arr[0]=="x"||$arr[0]=="X")&&$status==1){
 			$replytext="❌ปิดรอบแล้ว❌";
 		}
 		//check
@@ -97,12 +97,6 @@ lineId:$lineid";
 		if($text=='@id'){
 			$replytext="คุณ ".$res['displayName']." ยอดเงินปัจจุบัน $net บาท";
 		}
-		//ส่งข้อความให้ admin
-		/*if($status==1){
-			conclude();
-			$admintext="เสือ: ".select(1,$table,'เสือ').' มังกร: '.select(1,$table,'มังกร').' เสมอ: '.select(1,$table,'เสมอ');
-			sendline('Ucb19a6fc85ac19afe4a2247ad4c944f0',$access_token,$admintext);
-		}*/
 		
 		//คำสั่งเฉพาะ admin
 		if($admin==1){				
