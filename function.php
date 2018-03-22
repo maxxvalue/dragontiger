@@ -37,7 +37,8 @@ function insert($table,$name,$lineid,$NET){				//เพิ่มค่ามา�
 	ID INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 	รายการ VARCHAR(255),
 	จำนวนเงิน INT,
-	เวลา TIMESTAMP
+	เวลา DATETIME,
+	timestamp TIMESTAMP
 	)";
 	$con->query($sql);
 }
