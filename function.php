@@ -256,38 +256,48 @@ function resultdragontiger($text){
 			$res9['มังกรแดง']=1;
 		}
 		//คำนวณผลส่งออกในตัวแปร reply
-		$reply='สรุปผลรอบที่ '.$row['NET'];
+		$profit=0;
+		$loss=0;
+		$sublap=$row['NET'];
+		$reply='สรุปผลรอบที่ '.$sublap;
 		while($row=$result->fetch_assoc()){
 			if($row['play']==1){
 				$money=0;
-				//คิดเงินฝั่งถูก
+				//เก็บค่ารายได้, รายจ่าย
+				$profit+=$row['เสือ']+$row['เสือคี่']+$row['เสือคู่']+$row['เสือดำ']+$row['เสือแดง']+$row['มังกร']+$row['มังกรคู่']+$row['มังกรคี่']+$row['มังกรดำ']+$row['มังกรแดง']+$row['เสมอ'];
+				//คิดเงินฝั่งถูก, เก็บค่ารายจ่าย
 				foreach($res1 as $n=>$v){
 					if($v==1&&$row[$n]!=0){
 						$money+=$row[$n];
+						$loss+=$row[$n];
 						$row[$n]=0;
 					}
 				}
 				foreach($res5 as $n=>$v){
 					if($v==1&&$row[$n]!=0){
 						$money+=$row[$n]*1.05;
+						$loss+=$row[$n]*1.05;
 						$row[$n]=0;
 					}
 				}
 				foreach($res7 as $n=>$v){
 					if($v==1&&$row[$n]!=0){
 						$money+=$row[$n]*0.75;
+						$loss+=$row[$n]*0.75;
 						$row[$n]=0;
 					}
 				}
 				foreach($res9 as $n=>$v){
 					if($v==1&&$row[$n]!=0){
 						$money+=$row[$n]*0.9;
+						$loss+=$row[$n]*0.9;
 						$row[$n]=0;
 					}
 				}
 				foreach($res8 as $n=>$v){
 					if($v==1&&$row[$n]!=0){
 						$money+=$row[$n]*8;
+						$loss+=$row[$n]*8;
 						$row[$n]=0;
 					}
 				}
@@ -330,6 +340,9 @@ function resultdragontiger($text){
 				update($row['ID'],$table,'NET',($row['NET']+$money));
 				//เปลี่ยนเป็น 0
 				update($row['ID'],$table,'play',0);
+				//insert into LineID
+				$insert_lineid="INSERT INTO ".$row['LineID']." ('รายการ','จำนวนเงิน')
+				VALUE ('แทง',$money)";$con->query($insert_lineid);
 				//สร้างข้อความสรุปผล
 				if($money>0){
 					$reply.='
@@ -346,6 +359,18 @@ function resultdragontiger($text){
 				cleartable($row['ID']);
 			}
 		}
+		//insert into panal
+		$sql="SELECT * FROM panal";
+		$result=$con->query($sql);
+		while($row=$result->fetch_assoc()){
+			$lap=$row['รอบ'];
+		}
+		if(!isset($lap)){
+			$lap=1;
+		}
+		$insert_panal="INSERT INTO panal ('รอบ','รอบย่อย','ได้','เสีย')
+		VALUE ($lap,$sublap,$profit,$loss)";
+		$con->query($insert_panal);
 	}
 	else{
 		$reply='❌สรุปผิด กรุณาสรุปใหม่❌';
