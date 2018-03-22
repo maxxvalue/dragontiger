@@ -263,8 +263,6 @@ function resultdragontiger($text){
 		while($row=$result->fetch_assoc()){
 			if($row['play']==1){
 				$money=0;
-				//เก็บค่ารายได้, รายจ่าย
-				$profit+=$row['เสือ']+$row['เสือคี่']+$row['เสือคู่']+$row['เสือดำ']+$row['เสือแดง']+$row['มังกร']+$row['มังกรคู่']+$row['มังกรคี่']+$row['มังกรดำ']+$row['มังกรแดง']+$row['เสมอ'];
 				//คิดเงินฝั่งถูก, เก็บค่ารายจ่าย
 				foreach($res1 as $n=>$v){
 					if($v==1&&$row[$n]!=0){
@@ -305,33 +303,39 @@ function resultdragontiger($text){
 				foreach($res1 as $n=>$v){
 					if($row[$n]!=0&&$res8['เสมอ']==1){
 						$money-=$row[$n]/2;
+						$profit+=$row[$n]/2;
 						$row[$n]=0;
 					}
 					elseif($row[$n]!=0){
 						$money-=$row[$n];
+						$profit+=$row[$n];
 						$row[$n]=0;
 					}
 				}
 				foreach($res5 as $n=>$v){
 					if($row[$n]!=0){
 						$money-=$row[$n];
+						$profit+=$row[$n];
 						$row[$n]=0;
 					}
 				}foreach($res7 as $n=>$v){
 					if($row[$n]!=0){
 						$money-=$row[$n];
+						$profit+=$row[$n];
 						$row[$n]=0;
 					}
 				}
 				foreach($res9 as $n=>$v){
 					if($row[$n]!=0){
 						$money-=$row[$n];
+						$profit+=$row[$n];
 						$row[$n]=0;
 					}
 				}
 				foreach($res8 as $n=>$v){
 					if($row[$n]!=0){
 						$money-=$row[$n];
+						$profit+=$row[$n];
 						$row[$n]=0;
 					}
 				}
