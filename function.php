@@ -341,7 +341,7 @@ function resultdragontiger($text){
 				//เปลี่ยนเป็น 0
 				update($row['ID'],$table,'play',0);
 				//insert into LineID
-				$insert_lineid="INSERT INTO ".$row['LineID']." ('รายการ','จำนวนเงิน')
+				$insert_lineid="INSERT INTO ".$row['LineID']." (รายการ,จำนวนเงิน)
 				VALUE ('แทง',$money)";$con->query($insert_lineid);
 				//สร้างข้อความสรุปผล
 				if($money>0){
@@ -368,7 +368,7 @@ function resultdragontiger($text){
 		if(!isset($lap)){
 			$lap=1;
 		}
-		$insert_panal="INSERT INTO panal ('รอบ','รอบย่อย','ได้','เสีย')
+		$insert_panal="INSERT INTO panal (รอบ,รอบย่อย,ได้,เสีย)
 		VALUE ($lap,$sublap,$profit,$loss)";
 		$con->query($insert_panal);
 	}
