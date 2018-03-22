@@ -370,7 +370,10 @@ function resultdragontiger($text){
 			$lap=$row['รอบ'];
 		}
 		if(!isset($lap)){
-			$lap=1;
+			$lap=0;
+		}
+		if($sublap==1){
+			$lap++;
 		}
 		$insert_panal="INSERT INTO panal (รอบ,รอบย่อย,ได้,เสีย)
 		VALUE ($lap,$sublap,$profit,$loss)";
