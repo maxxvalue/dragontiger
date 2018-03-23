@@ -391,7 +391,7 @@ function resultdragontiger($text){
 		if($sublap==1){
 			$lap++;
 		}
-		$insert_panal="INSERT INTO panal (รอบ,รอบย่อย,ได้,เสีย,วัน,เวลา)
+		$insert_panal="INSERT INTO panaldt (รอบ,รอบย่อย,ได้,เสีย,วัน,เวลา)
 		VALUE ($lap,$sublap,$profit,$loss,'$date','$time')";
 		$con->query($insert_panal);
 	}
