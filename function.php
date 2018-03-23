@@ -37,8 +37,8 @@ function insert($table,$name,$lineid,$NET){				//เพิ่มค่ามา�
 	ID INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 	รายการ VARCHAR(255),
 	จำนวนเงิน INT,
-	เวลา DATETIME,
-	timestamp TIMESTAMP
+	วัน DATE,
+	เวลา TIME
 	)";
 	$con->query($sql);
 }
@@ -261,6 +261,20 @@ function resultdragontiger($text){
 		$loss=0;
 		$sublap=$row['NET'];
 		$reply='สรุปผลรอบที่ '.$sublap;
+		//หาค่าเวลา
+		$time_sql="SELECT CURRENT_TIMESTAMP";
+		$result=$con->query($time_sql);
+		$row=$result->fetch_assoc();
+		$timestamp=$row['CURRENT_TIMESTAMP'];
+		$var=explode(' ',$timestamp);
+		$date=explode('-',$var[0]);
+		$time=explode(':',$var[1]);
+		$time[0]+=13;
+		if($time[0]>=24){
+			$time[0]-=24;
+			$date[2]++;
+		}
+		$timestamp="$date[0]-$date[1]-$date[2] $time[0]:$time[1]:$time[2]";
 		while($row=$result->fetch_assoc()){
 			if($row['play']==1){
 				$money=0;
@@ -346,8 +360,8 @@ function resultdragontiger($text){
 				//เปลี่ยนเป็น 0
 				update($row['ID'],$table,'play',0);
 				//insert into LineID
-				$insert_lineid="INSERT INTO ".$row['LineID']." (รายการ,จำนวนเงิน)
-				VALUE ('แทง',$money)";$con->query($insert_lineid);
+				$insert_lineid="INSERT INTO ".$row['LineID']." (รายการ,จำนวนเงิน,เวลา)
+				VALUE ('แทง',$money,$timestamp)";$con->query($insert_lineid);
 				//สร้างข้อความสรุปผล
 				if($money>0){
 					$reply.='
@@ -376,8 +390,8 @@ function resultdragontiger($text){
 		if($sublap==1){
 			$lap++;
 		}
-		$insert_panal="INSERT INTO panal (รอบ,รอบย่อย,ได้,เสีย)
-		VALUE ($lap,$sublap,$profit,$loss)";
+		$insert_panal="INSERT INTO panal (รอบ,รอบย่อย,ได้,เสีย,เวลา)
+		VALUE ($lap,$sublap,$profit,$loss,$timestamp)";
 		$con->query($insert_panal);
 	}
 	else{
