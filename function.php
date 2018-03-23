@@ -274,7 +274,8 @@ function resultdragontiger($text){
 			$time[0]-=24;
 			$date[2]++;
 		}
-		$timestamp="$date[0]-$date[1]-$date[2] $time[0]:$time[1]:$time[2]";
+		$date="$date[0]-$date[1]-$date[2]";
+		$time="$time[0]:$time[1]:$time[2]";
 		while($row=$result->fetch_assoc()){
 			if($row['play']==1){
 				$money=0;
@@ -360,8 +361,8 @@ function resultdragontiger($text){
 				//เปลี่ยนเป็น 0
 				update($row['ID'],$table,'play',0);
 				//insert into LineID
-				$insert_lineid="INSERT INTO ".$row['LineID']." (รายการ,จำนวนเงิน,เวลา)
-				VALUE ('แทง',$money,$timestamp)";$con->query($insert_lineid);
+				$insert_lineid="INSERT INTO ".$row['LineID']." (รายการ,จำนวนเงิน,วัน,เวลา)
+				VALUE ('แทง',$money,$date,$time)";$con->query($insert_lineid);
 				//สร้างข้อความสรุปผล
 				if($money>0){
 					$reply.='
@@ -390,8 +391,8 @@ function resultdragontiger($text){
 		if($sublap==1){
 			$lap++;
 		}
-		$insert_panal="INSERT INTO panal (รอบ,รอบย่อย,ได้,เสีย,เวลา)
-		VALUE ($lap,$sublap,$profit,$loss,$timestamp)";
+		$insert_panal="INSERT INTO panal (รอบ,รอบย่อย,ได้,เสีย,วัน,เวลา)
+		VALUE ($lap,$sublap,$profit,$loss,$date,$time)";
 		$con->query($insert_panal);
 	}
 	else{
