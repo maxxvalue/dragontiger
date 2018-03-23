@@ -264,8 +264,8 @@ function resultdragontiger($text){
 		//หาค่าเวลา
 		$time_sql="SELECT CURRENT_TIMESTAMP";
 		$result=$con->query($time_sql);
-		$row=$result->fetch_assoc();
-		$timestamp=$row['CURRENT_TIMESTAMP'];
+		$var=$result->fetch_assoc();
+		$timestamp=$var['CURRENT_TIMESTAMP'];
 		$var=explode(' ',$timestamp);
 		$date=explode('-',$var[0]);
 		$time=explode(':',$var[1]);
