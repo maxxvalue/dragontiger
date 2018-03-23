@@ -263,9 +263,9 @@ function resultdragontiger($text){
 		$reply='สรุปผลรอบที่ '.$sublap;
 		//หาค่าเวลา
 		$time_sql="SELECT CURRENT_TIMESTAMP";
-		$result=$con->query($time_sql);
-		$var=$result->fetch_assoc();
-		$timestamp=$var['CURRENT_TIMESTAMP'];
+		$var_result=$con->query($time_sql);
+		$var_row=$var_result->fetch_assoc();
+		$timestamp=$var_row['CURRENT_TIMESTAMP'];
 		$var=explode(' ',$timestamp);
 		$date=explode('-',$var[0]);
 		$time=explode(':',$var[1]);
