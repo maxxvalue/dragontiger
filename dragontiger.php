@@ -207,6 +207,7 @@ lineId:$lineid";
 				insert($table,$var,$lineid,0);
 				if($netid==0){
 					insert('money',$var,$lineid,0);
+					create($lineid);
 				}
 				$replytext="คุณ ".$res['displayName']." ลงทะเบียนแล้ว";
 			}
