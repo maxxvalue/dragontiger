@@ -110,24 +110,27 @@ lineId:$lineid";
 				update(1,$table,"status",1);
 				update(1,$table,"NET",1);
 				update(1,$table,'admin',0);
-				$replytext="เตรียมเริ่มรอบแรก";
+				$replytext="เตรียมเริ่มรอบแรก...";
 			}
 			elseif($text=="op"||$text=="Op"){
-				$replytext='เปิดรอบแล้วไม่ต้องเปิดรอบอีก';
+				$replytext='เปิดรอบแล้วไม่ต้องเปิดรอบอีก❌';
 			}
 			//ปิดรอบ
 			if(($text=='End'||$text=='end')&&$status==1&&$poll==0){
 				update(1,$table,'status',0);
-				$replytext='จบการเล่นรอบนี้';
+				$replytext='จบการเล่นรอบนี้...';
 			}
 			elseif(($text=='End'||$text=='end')&&$status==0){
-				$replytext='ใช้คำสั่ง op เพื่อเปิดรอบ';
+				$replytext='ใช้คำสั่ง op เพื่อเปิดรอบ❌';
 			}
 			elseif(($text=='End'||$text=='end')){
-				$replytext='กรุณาปิดรอบและสรุปผลก่อน';
+				$replytext='กรุณาปิดรอบและสรุปผลก่อน❌';
 			}
 			//เปิดรอบ ใช้ช่อง net เป็นช่องนับรอบ
-			if($type=="sticker"&&$status==1){
+			if($type=='sticker'&&$status==0){
+				$replytext='กรุณาเปิดรอบก่อน❌';
+			}
+			elseif($type=="sticker"&&$status==1){
 				if($sarop==0){
 					$manymessage=2;
 					update(1,$table,"status",2);
