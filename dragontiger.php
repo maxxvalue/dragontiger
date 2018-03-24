@@ -99,7 +99,7 @@ lineId:$lineid";
 		}
 		
 		//คำสั่งเฉพาะ admin
-		if($admin==1){				
+		if($admin==1){
 			//ถ้าพิมมาว่า ปรับ ให้อัพเดทชื่อทุกคน
 			if($text=="ปรับ"){								
 				config($access_token,$groupid,$table);
