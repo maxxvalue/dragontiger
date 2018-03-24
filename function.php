@@ -365,7 +365,7 @@ function resultdragontiger($text){
 				update($row['ID'],$table,'play',0);
 				//insert into LineID
 				$insert_lineid="INSERT INTO ".$row['LineID']." (รายการ,จำนวนเงิน,วัน,เวลา)
-				VALUE ('แทง',$money,'$date','$time')";$con->query($insert_lineid);
+				VALUE ('แทงเสือมังกร',$money,'$date','$time')";$con->query($insert_lineid);
 				//สร้างข้อความสรุปผล
 				if($money>0){
 					$reply.='
