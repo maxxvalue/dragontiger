@@ -1,449 +1,256 @@
 <?php
-$servername = "den1.mysql6.gear.host";
-$username = "line";
-$password = "Og8B4hjP4_2?";
-$database = "Line";
-$con = new mysqli($servername, $username, $password,$database);
-	//ตั้งค่าเพื่อใช้ sql ทั้งโปรแกรมแบบ global
-function getid($lineid,$table){ 					//ฟังก์ชั่นหาค่า id จาก lineid
-	global $con;
-	$sql = "SELECT * FROM $table";			//select ทุกค่าจาก database
-	$result = $con->query($sql);
-	while($row=$result->fetch_assoc()){		//ไล่ทุก id
-		if($lineid==$row["LineID"]){		//ค้นหา column LineID
-			return $row["ID"];				//คืนค่า column ID
-			}
-		}
-	return 0;								//แต่ถ้าวิ่งหาทุก id แล้วไม่เจอ lineid ที่ตรงกัน คืนค่า 0
-}
-function select($id,$table,$column){		//ฟังก์ชั่นคืนค่าจาก database
-	global $con;
-	$sql = "SELECT * FROM $table WHERE ID=$id";//select จาก table และ id จากที่รับค่ามา
-	$result = $con->query($sql);
-	$row=$result->fetch_assoc();
-	return $row[$column];					//คืนค่าที่ต้องการ
-}
-function update($id,$table,$column,$text){	//เปลี่ยนค่าใน database
-	global $con;
-	$sql = "UPDATE $table SET $column='$text' WHERE ID=$id";
-	$con->query($sql);
-}
-function insert($table,$name,$lineid,$NET){				//เพิ่มค่ามาใน database
-	global $con;
-	$sql = "INSERT INTO $table (Name, LineID,NET)
-	VALUES ('$name','$lineid',$NET)";
-	$con->query($sql);
-	$sql="CREATE TABLE $lineid (
-	ID INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-	รายการ VARCHAR(255),
-	จำนวนเงิน INT,
-	วัน DATE,
-	เวลา TIME
-	)";
-	$con->query($sql);
-}
-function codename($text){				//ฟังก์ชั่นปรับค่าชื่อให้มี \
-	$backs=array();						//สร้าง backs ให้เป็น array
-	$text2=json_encode($text);			//แปลงค่า text ให้กลายเป็น json
-	$arr=str_split($text2);				//แยกส่วน text2 ให้กลายเป็น array ใน arr
-	for($n=0;$arr[$n]!='';$n++){		//ไล่ตรวจสอบว่าตัวไหนเป็น \
-		if($arr[$n]=="\\"){
-			$backs[]=$n;				//ถ้าตัวนั้นเป็น \ ให้เก็บค่าตัวชี้ไว้ใน backs
-		}
-	}
-	$backs[]=count($arr)-1;				//ใส่ค่าตัวชี้สุดท้ายใน backs
-	$substr=array();					//กำหนด substr เป็น array
-	$substr[]=substr($text2,0,$backs[0]+1);//แยกส่วนตัวแรกก่อน โดยให้ตัวสุดท้ายเป็น \
-	for($n=0;$n<=count($backs)-2;$n++){	//แยกส่วนตัวที่เหลือ โดยให้ตัวสุดท้ายเป็น \
-		$substr[]=substr($text2,$backs[$n]+1,$backs[$n+1]-$backs[$n]);
-	}
-	for($n=0;$n<=count($substr)-2;$n++){//ใส่ \ ต่อในแต่ละส่วนแล้วนำมาต่อกัน
-		$rtext.=$substr[$n]."\\";
-	}
-	$rtext.=$substr[count($substr)-1];	//ต่อส่วนสุดท้ายเข้าด้วยกัน
-	return $rtext;						//คืนค่าออกมา
-}
-function config($access_token,$groupid,$table){						//ปรับชื่อทุกคน
-	global $con;
-	$sql="SELECT * FROM $table";
-	$result = $con->query($sql);
-	while($row=$result->fetch_assoc()){
-		$lineid=$row['LineID'];
+$table="dragontigerdb";	//ตั้งค่าตัวแปร
+$max=200;
+$access_token = 'SIkXpp6ylNgQ42HEg2wkOD9hG7YRkzHbsORCxZ3p9iWLynhB9/t7hD9zdoMdUbXYqaibnclBOqZUfj+jLpWyuwWRGpvWd2hMaZvRf+2LyXbbRi9SDZrlRfGcWm6w3ry+fatBxeFmvx4S0zjEzvvFFAdB04t89/1O/w1cDnyilFU=';
+
+$content = file_get_contents('php://input');		//รับค่าจากล่องข้อความใน line
+$events = json_decode($content, true);			//แก้ระหัส json ที่ line ส่งมา
+require('function.php');				//เรียกฟังก์ชั่นที่สร้างไว้
+if (!is_null($events['events'])) {			//ตรวจสอบว่ามีข้อมูลส่งมาหรือไม่
+	foreach ($events['events'] as $event) {		//วนลูปใน array ทีละตัว
+		$replyToken = $event['replyToken'];	//รับค่า  replyToken เพื่อรอส่งกลับ
+		$text=$event['message']['text'];	//รับค่าข้อความที่ส่งเข้ามาในตัวแปร text
+		$type=$event['message']['type'];	//รับค่า type
+		$text=clear($text);					//กำจัดเว้นวรรคและการเอ็นเตอร์
+		$lineid=$event['source']['userId'];	//รับค่า userId จากไลน์เก็บไว้ในตัวแปร lineid
+		$groupid=$event['source']['groupId'];//รับค่า groupId จากไลน์เก็บไว้ในตัวแปร groupid
+		$wrong=" ❌รูปแบบการแทงผิด❌";							//สร้างข้อความถ้าเกินพิมพ์พนันผิด
+		
 		$url='https://api.line.me/v2/bot/profile/'.$lineid;	//กำหนด url เพื่อเตรียมส่งรับค่า profile
 		$headers=array('Authorization: Bearer ' . $access_token);//กำหนด headers เพื่อเตรียมรับค่า profile
 		$ch = curl_init($url);					//เริ่ม curl
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER,TRUE);		//ปรับให้เป็นแบบตอบกลับ
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);		//ตั้งค่า headers
-		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);		//ปลดระบบความปลอดภัย
-		$res = curl_exec($ch);				//ส่งค่าไปให้ไลน์และรับกลับด้วยตัวแปร res
-		$r=json_decode($res,true);				//แก้ json เป็น array
-		if($r['displayName']==''){
+		//curl_setopt($ch, CURLOPT_PROXY, $proxy);			//ตั้งความปลอดภัย
+		//curl_setopt($ch, CURLOPT_PROXYUSERPWD, $proxyauth);
+		$result = curl_exec($ch);				//ส่งค่าไปให้ไลน์และรับกลับด้วยตัวแปร result
+		$res=json_decode($result,true);				//แก้ json เป็น array
+		if($res['userId']==''){
 			$url='https://api.line.me/v2/bot/group/'.$groupid.'/member/'.$lineid;	//กำหนด url เพื่อเตรียมส่งรับค่า profile แบบ group
 			$headers=array('Authorization: Bearer ' . $access_token);//กำหนด headers เพื่อเตรียมรับค่า profile
 			$ch = curl_init($url);					//เริ่ม curl
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER,TRUE);		//ปรับให้เป็นแบบตอบกลับ
 			curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);		//ตั้งค่า headers
-			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);		//ปลดระบบความปลอดภัย
-			$res = curl_exec($ch);				//ส่งค่าไปให้ไลน์และรับกลับด้วยตัวแปร res
-			$r=json_decode($res,true);				//แก้ json เป็น array
+			//curl_setopt($ch, CURLOPT_PROXY, $proxy);			//ตั้งความปลอดภัย
+			//curl_setopt($ch, CURLOPT_PROXYUSERPWD, $proxyauth);
+			$result = curl_exec($ch);				//ส่งค่าไปให้ไลน์และรับกลับด้วยตัวแปร result
+			$res=json_decode($result,true);				//แก้ json เป็น array
 		}
-		if($r['displayName']!=''){
-			update($row['ID'],$table,"Name",codename($r['displayName']));
-			update($row['ID'],'money',"Name",codename($r['displayName']));
+		$id=getid($lineid,$table);					//เรียกฟังก์ชั่น เพื่อหา id จาก lineid
+		$netid=getid($lineid,'money');		//รับ id ค่าเงิน
+		$status=select(1,$table,"status");	//รับค่า status
+		$lap=select(1,$table,"NET");	//รับค่ารอบที่
+		$admin=select($id,$table,"admin"); //รับค่า admin
+		$sarop=select(1,$table,"admin");	//รับค่าว่าสรุปยัง
+		$poll=select(1,$table,'LineID');		//รับค่าผลการสรุป
+		$net=select($netid,'money','NET');	//รับค่าเงินที่มีอยู่
+		update($id,$table,'NET',$net);		//update ค่าเงิน
+		$arr=str_split($text);						//แยกการรับค่ามาทีละตัวเก็บไว้ใน arr
+		$arr1=explode('-',$text);
+		
+		if($text=='ox'||$text=='Ox'){
+			$replytext="groupId:$groupid
+lineId:$lineid";
 		}
-	}
-}
-function clear($text){   //ลบอักขระช่องว่างและอักขระเอ็นเตอร์
-	$search=array(" ","
-");
-	$reply=str_replace($search,"",$text);
-	return $reply;
-}
-function sum($id,$table){
-	global $con;
-	$sql="SELECT * FROM $table WHERE ID=$id";
-	$result=$con->query($sql);
-	$row = $result->fetch_assoc();
-	$sum=0;
-	$n=0;
-	foreach($row as $v){
-		if($n>=7){
-			$sum+=$v;
+		if(($arr[0]=="t"||$arr[0]=="T"||$arr[0]=="d"||$arr[0]=="D"||$arr1[0]=="td"||$arr1[0]=="Td")&&$status==2&&$id==0){
+			$replytext="คุณ ".$res['displayName']." กรุณาพิม play";
 		}
-		$n++;
-	}
-	return $sum;
-}
-function updatedragontiger($id,$text){
-	$table='dragontigerdb';
-	$var=explode('-',$text);
-	$front=$var[0];
-	$bet=$var[1];
-	update($id,$table,'play',1);
-	if($front=='t'||$front=='T'){
-		update($id,$table,'เสือ',$bet);
-	}
-	elseif($front=='t1'||$front=='T1'){
-		update($id,$table,'เสือคี่',$bet);
-	}
-	elseif($front=='t2'||$front=='T2'){
-		update($id,$table,'เสือคู่',$bet);
-	}
-	elseif($front=='tb'||$front=='Tb'){
-		update($id,$table,'เสือดำ',$bet);
-	}
-	elseif($front=='tr'||$front=='Tr'){
-		update($id,$table,'เสือแดง',$bet);
-	}
-	elseif($front=='d'||$front=='D'){
-		update($id,$table,'มังกร',$bet);
-	}
-	elseif($front=='d1'||$front=='D1'){
-		update($id,$table,'มังกรคี่',$bet);
-	}
-	elseif($front=='d2'||$front=='D2'){
-		update($id,$table,'มังกรคู่',$bet);
-	}
-	elseif($front=='db'||$front=='Db'){
-		update($id,$table,'มังกรดำ',$bet);
-	}
-	elseif($front=='dr'||$front=='Dr'){
-		update($id,$table,'มังกรแดง',$bet);
-	}
-	elseif($front=='td'||$front=='Td'){
-		update($id,$table,'เสมอ',$bet);
-	}
-	else{
-		return 1;
-	}
-	if($bet==0){
-		return 1;
-	}
-}
-function cancledragontiger($id,$front){
-	$table='dragontigerdb';
-	$bet=0;
-	if($front==1){
-		update($id,$table,'เสือ',$bet);
-	}
-	elseif($front==11){
-		update($id,$table,'เสือคี่',$bet);
-	}
-	elseif($front==12){
-		update($id,$table,'เสือคู่',$bet);
-	}
-	elseif($front==13){
-		update($id,$table,'เสือดำ',$bet);
-	}
-	elseif($front==14){
-		update($id,$table,'เสือแดง',$bet);
-	}
-	elseif($front==2){
-		update($id,$table,'มังกร',$bet);
-	}
-	elseif($front==21){
-		update($id,$table,'มังกรคี่',$bet);
-	}
-	elseif($front==22){
-		update($id,$table,'มังกรคู่',$bet);
-	}
-	elseif($front==23){
-		update($id,$table,'มังกรดำ',$bet);
-	}
-	elseif($front==24){
-		update($id,$table,'มังกรแดง',$bet);
-	}
-	elseif($front==3){
-		update($id,$table,'เสมอ',$bet);
-	}
-	else{
-		return 1;
-	}
-}
-function resultdragontiger($text){
-	global $con;
-	$table='dragontigerdb';
-	$sql="SELECT * FROM $table";
-	$result=$con->query($sql);
-	$row = $result->fetch_assoc();
-	$var=explode(',',$text);
-	$tfront=substr($var[0],0,1);
-	$nfront=substr($var[0],1);
-	$tback=substr($var[1],0,1);
-	$nback=substr($var[1],1);
-	$num=array(1,2,3,4,5,6,7,8,9,10,11,12,13);
-	$res1=array('เสือ'=>0,'มังกร'=>0);
-	$res5=array('เสือคู่'=>0,'มังกรคู่'=>0);
-	$res7=array('เสือคี่'=>0,'มังกรคี่'=>0);
-	$res9=array('เสือดำ'=>0,'เสือแดง'=>0,'มังกรดำ'=>0,'มังกรแดง'=>0);
-	$res8=array('เสมอ'=>0);
-	if(in_array($nfront,$num)&&in_array($nback,$num)&&($tfront==1||$tfront==2)&&($tback==1||$tback==2)){
-		//check เสือ มังกร เสมอ
-		if($nfront>$nback){
-			$res1['เสือ']=1;
-		}
-		elseif($nfront<$nback){
-			$res1['มังกร']=1;
-		}
-		else{
-			$res8['เสมอ']=1;
-		}
-		//check เสือคู่ เสือคี่
-		if($nfront%2==0){
-			$res5['เสือคู่']=1;
-		}
-		else{
-			$res7['เสือคี่']=1;
-		}
-		//check มังกรคู่ มังกรคี่
-		if($nback%2==0){
-			$res5['มังกรคู่']=1;
-		}
-		else{
-			$res7['มังกรคี่']=1;
-		}
-		//check เสือดำ เสือแดง
-		if($tfront==1){
-			$res9['เสือดำ']=1;
-		}
-		else{
-			$res9['เสือแดง']=1;
-		}
-		//check มังกรดำ มังกรแดง
-		if($tback==1){
-			$res9['มังกรดำ']=1;
-		}
-		else{
-			$res9['มังกรแดง']=1;
-		}
-		//คำนวณผลส่งออกในตัวแปร reply
-		$profit=0;
-		$loss=0;
-		$sublap=$row['NET'];
-		$reply='สรุปผลรอบที่ '.$sublap;
-		//หาค่าเวลา
-		$time_sql="SELECT CURRENT_TIMESTAMP";
-		$var_result=$con->query($time_sql);
-		$var_row=$var_result->fetch_assoc();
-		$timestamp=$var_row['CURRENT_TIMESTAMP'];
-		$var=explode(' ',$timestamp);
-		$date=explode('-',$var[0]);
-		$time=explode(':',$var[1]);
-		$time[0]+=13;
-		if($time[0]>=24){
-			$time[0]-=24;
-			$date[2]++;
-		}
-		$date="$date[0]-$date[1]-$date[2]";
-		$time="$time[0]:$time[1]:$time[2]";
-		while($row=$result->fetch_assoc()){
-			if($row['play']==1){
-				$money=0;
-				//คิดเงินฝั่งถูก, เก็บค่ารายจ่าย
-				foreach($res1 as $n=>$v){
-					if($v==1&&$row[$n]!=0){
-						$money+=$row[$n];
-						$loss+=$row[$n];
-						$row[$n]=0;
-					}
-				}
-				foreach($res5 as $n=>$v){
-					if($v==1&&$row[$n]!=0){
-						$money+=$row[$n]*1.05;
-						$loss+=$row[$n]*1.05;
-						$row[$n]=0;
-					}
-				}
-				foreach($res7 as $n=>$v){
-					if($v==1&&$row[$n]!=0){
-						$money+=$row[$n]*0.75;
-						$loss+=$row[$n]*0.75;
-						$row[$n]=0;
-					}
-				}
-				foreach($res9 as $n=>$v){
-					if($v==1&&$row[$n]!=0){
-						$money+=$row[$n]*0.9;
-						$loss+=$row[$n]*0.9;
-						$row[$n]=0;
-					}
-				}
-				foreach($res8 as $n=>$v){
-					if($v==1&&$row[$n]!=0){
-						$money+=$row[$n]*8;
-						$loss+=$row[$n]*8;
-						$row[$n]=0;
-					}
-				}
-				//คิดเงินฝั่งผิด
-				foreach($res1 as $n=>$v){
-					if($row[$n]!=0&&$res8['เสมอ']==1){
-						$money-=$row[$n]/2;
-						$profit+=$row[$n]/2;
-						$row[$n]=0;
-					}
-					elseif($row[$n]!=0){
-						$money-=$row[$n];
-						$profit+=$row[$n];
-						$row[$n]=0;
-					}
-				}
-				foreach($res5 as $n=>$v){
-					if($row[$n]!=0){
-						$money-=$row[$n];
-						$profit+=$row[$n];
-						$row[$n]=0;
-					}
-				}foreach($res7 as $n=>$v){
-					if($row[$n]!=0){
-						$money-=$row[$n];
-						$profit+=$row[$n];
-						$row[$n]=0;
-					}
-				}
-				foreach($res9 as $n=>$v){
-					if($row[$n]!=0){
-						$money-=$row[$n];
-						$profit+=$row[$n];
-						$row[$n]=0;
-					}
-				}
-				foreach($res8 as $n=>$v){
-					if($row[$n]!=0){
-						$money-=$row[$n];
-						$profit+=$row[$n];
-						$row[$n]=0;
-					}
-				}
-				$money=number_format($money);
-				//ส่งไปเก็บค่าใน database
-				update($row['ID'],$table,'NET',($row['NET']+$money));
-				//เปลี่ยนเป็น 0
-				update($row['ID'],$table,'play',0);
-				//insert into LineID
-				$insert_lineid="INSERT INTO ".$row['LineID']." (รายการ,จำนวนเงิน,วัน,เวลา)
-				VALUE ('แทง',$money,'$date','$time')";$con->query($insert_lineid);
-				//สร้างข้อความสรุปผล
-				if($money>0){
-					$reply.='
-คุณ '.json_decode($row['Name'],true)." +$money = ".($row['NET']+$money).' บาท';
-				}
-				elseif($money<0){
-					$reply.='
-คุณ '.json_decode($row['Name'],true)." $money = ".($row['NET']+$money).' บาท';
+		//ขึ้นด้วย t คือเริ่มแทง
+		elseif(($arr[0]=="t"||$arr[0]=="T"||$arr[0]=="d"||$arr[0]=="D"||$arr1[0]=="td"||$arr1[0]=="Td")&&$status==2){
+			$var=explode('-',$text);
+			//ถ้ายังไม่ลงทะเบียนให้บอทแจ้งทุกข้อความ ว่าให้ลงทะเบียนก่อน
+			if($net>=$var[1]+sum($id,$table)){
+				$ans=updatedragontiger($id,$text);
+				if($ans==1){
+					$replytext='❌คุณ '.$res['displayName']." รูปแบบการแทงผิด❌";
 				}
 				else{
-					$reply.='
-คุณ '.json_decode($row['Name'],true)." ไม่ได้ไม่เสีย = ".($row['NET']+$money).' บาท';
+					$replytext=check($id);
 				}
-				cleartable($row['ID']);
+			}
+			else{
+				$replytext='❌คุณ '.$res['displayName']." ยอดเงินไม่พอ คงเหลือ $net บาท❌";
 			}
 		}
-		//insert into panal
-		$sql="SELECT MAX(รอบ) AS lap FROM panaldt";
-		$result=$con->query($sql);
-		$row=$result->fetch_assoc();
-		$lap=$row['lap'];
-		if(!isset($lap)){
-			$lap=0;
+		elseif(($arr[0]=="t"||$arr[0]=="T"||$arr[0]=="d"||$arr[0]=="D"||$arr1[0]=="td"||$arr1[0]=="Td")&&$status==1){
+			$replytext="❌ปิดรอบแล้ว❌";
 		}
-		if($sublap==1){
-			$lap++;
+		//ขึ้นด้วย x คือลบออก
+		if(($arr[0]=="x"||$arr[0]=="X")&&$status==2){
+			$var=substr($text,1);
+			$ans=cancledragontiger($id,$var);
+			if($ans==1){
+				$replytext='คุณ '.$res['displayName']." ❌รูปแบบการแทงผิด❌";
+			}
+			else{
+				$replytext=check($id);
+			}
 		}
-		$insert_panal="INSERT INTO panaldt (รอบ,รอบย่อย,ได้,เสีย,วัน,เวลา)
-		VALUE ($lap,$sublap,$profit,$loss,'$date','$time')";
-		$con->query($insert_panal);
-	}
-	else{
-		$reply='❌สรุปผิด กรุณาสรุปใหม่❌';
-	}
-	return $reply;
-}
-function sendline($lineid,$access_token,$messages){
-	$sent=[
+		elseif(($arr[0]=="x"||$arr[0]=="X")&&$status==1){
+			$replytext="❌ปิดรอบแล้ว❌";
+		}
+		//check
+		if($text=='check'||$text=='Check'){
+			$replytext=check($id);
+		}
+		//check ยอดเงินปัจจุบัน
+		if($text=='@id'){
+			$replytext="คุณ ".$res['displayName']." ยอดเงินปัจจุบัน $net บาท";
+		}
+		
+		//คำสั่งเฉพาะ admin
+		if($admin==1){				
+			//ถ้าพิมมาว่า ปรับ ให้อัพเดทชื่อทุกคน
+			if($text=="ปรับ"){								
+				config($access_token,$groupid,$table);
+				$replytext="อัพเดทชื่อสำเร็จ";
+			}
+			//เซ็ตรอบแรก
+			if(($text=="op"||$text=="Op")&&$status==0){
+				update(1,$table,"status",1);
+				update(1,$table,"NET",1);
+				update(1,$table,'admin',0);
+				$replytext="เตรียมเริ่มรอบแรก";
+			}
+			elseif($text=="op"||$text=="Op"){
+				$replytext='เปิดรอบแล้วไม่ต้องเปิดรอบอีก';
+			}
+			//ปิดรอบ
+			if(($text=='End'||$text=='end')&&$status==1&&$poll==0){
+				update(1,$table,'status',0);
+				$replytext='จบการเล่นรอบนี้';
+			}
+			elseif(($text=='End'||$text=='end')&&$status==0){
+				$replytext='ใช้คำสั่ง op เพื่อเปิดรอบ';
+			}
+			elseif(($text=='End'||$text=='end')){
+				$replytext='กรุณาปิดรอบและสรุปผลก่อน';
+			}
+			//เปิดรอบ ใช้ช่อง net เป็นช่องนับรอบ
+			if($type=="sticker"&&$status==1){
+				if($sarop==0){
+					$manymessage=2;
+					update(1,$table,"status",2);
+					update(1,$table,"admin",1);
+					$replytext1='🎲🎲กติกาเสือมังกร🎲🎲
+®️พิมพ์ play เพื่อลงทะเบียนก่อน
+➡️พิมพ์ T ตามด้วยตัวที่ต้องการจะเล่น เช่น t1-200
+➡️พิมพ์ X ตามด้วยรหัสตัวที่ไม่ต้องการเพื่อลบข้อมูล
+📌อัตราการจ่ายและรูปแบบการแทงอยู่ภายในโน้ตกลุ่ม📌
+♠️♥️วิธีนับแต้ม♦️♣️
+📌แทงเพิ่มได้เรื่อยๆจนกว่าจะจบรอบ📌';
+					$replytext2="เปิดรอบที่ ".$lap;
+				}
+				else{
+					$replytext='❌กรุณาสรุปผลก่อน❌';
+				}
+			}
+			//ปิดรอบ
+			if($type=="sticker"&&$status==2){
+				$manymessage=2;
+				update(1,$table,"status",1);
+				$replytext1='🎲🎲กติกาเสือมังกร🎲🎲
+®️พิมพ์ play เพื่อลงทะเบียนก่อน
+➡️พิมพ์ T ตามด้วยตัวที่ต้องการจะเล่น เช่น t1-200
+➡️พิมพ์ X ตามด้วยรหัสตัวที่ไม่ต้องการเพื่อลบข้อมูล
+📌อัตราการจ่ายและรูปแบบการแทงอยู่ภายในโน้ตกลุ่ม📌
+♠️♥️วิธีนับแต้ม♦️♣️
+📌แทงเพิ่มได้เรื่อยๆจนกว่าจะจบรอบ📌';
+				$replytext2="ปิดรอบที่ ".$lap;
+			}
+			
+			//check ผล
+			if(($arr[0]=="s"||$arr[0]=="S")&&$status==1){
+				$var1=substr($text,1);
+				$var=explode(',',$var1);
+				$tfront=substr($var[0],0,1);
+				$nfront=substr($var[0],1);
+				$tback=substr($var[1],0,1);
+				$nback=substr($var[1],1);
+				if($tfront==1){
+					$tfront='ดำ⚫';
+				}
+				elseif($tfront==2){
+					$tfront='แดง🔴';
+				}
+				if($tback==1){
+					$tback='ดำ⚫';
+				}
+				elseif($tback==2){
+					$tback='แดง🔴';
+				}
+				$replytext="ยืนยันสรุป
+🐯เสือสี $tfront แต้ม $nfront
+🐉มังกรสี $tback แต้ม $nback
+หรือไม่❓";
+				update(1,$table,'LineID',$var1);
+			}
+			elseif(($arr[0]=="s"||$arr[0]=="S")&&$status==2){
+				$replytext='❌กรุณาปิดรอบก่อน❌';
+			}
+			//@ok
+			if($text=='@ok'&&$poll!=0){
+				$replytext=resultdragontiger($poll);
+				update($netid,'money','NET',select($id,$table,'NET'));
+				update(1,$table,'LineID',0);
+				update(1,$table,'NET',$lap+1);
+				update(1,$table,'admin',0);
+			}
+			elseif($text=='@ok'&&$poll==0){
+				$replytext='❌สรุปผิด กรุณาสรุปใหม่❌';
+			}
+		}
+		//คำสั่งลงทะเบียน
+		if(($text=="play"||$text=='Play')&&$id==0){
+			if($res['displayName']!=''){
+				$var=codename($res['displayName']);
+				insert($table,$var,$lineid,0);
+				if($netid==0){
+					insert('money',$var,$lineid,0);
+				}
+				$replytext="คุณ ".$res['displayName']." ลงทะเบียนแล้ว";
+			}
+			else{
+				$replytext="ไม่สามารถลงทะเบียนได้";
+			}
+		}
+		//ถ้าลงทะเบียนแล้วก็ให้บอกว่าพร้อมเล่น
+		elseif(($text=="play"||$text=='Play')&&$id!=0){
+			$replytext="คุณ ".$res['displayName']." พร้อมเล่นแล้ว";
+		}
+		//สร้างข้อความตอบกลับ
+		$messages = [
 			[
-				'type' => 'text',
-				'text' => $messages
+			'type' => 'text',
+			'text' => $replytext
 			]
 		];
-	$url = 'https://api.line.me/v2/bot/message/push';		//url สำหรับตอบกลับ
-	$data = [
-		'to' => $lineid,				//replayToken ใส่ตรงนี้
-		'messages' => $sent,
-	];
-	$post = json_encode($data);						//web สำหรับตอบกลับ
-	$headers = array('Content-Type: application/json', 'Authorization: Bearer ' . $access_token);
-													//headers สำหรับตอบกลับ
-	$ch = curl_init($url);							//เริ่ม curl 
-	curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");//ปรับเป็นแบบ post
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);	
-	curl_setopt($ch, CURLOPT_POSTFIELDS, $post);	//ใส่ข้อความที่จะส่ง
-	curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);	//ส่ง header
-	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);	
-	curl_exec($ch);									//ส่งไปให้ไลน์ตอบกลับ
-}
-function cleartable($id){
-	global $con;
-	$sql = "UPDATE dragontigerdb SET เสือ=0,เสือคู่=0,เสือคี่=0,เสือดำ=0,เสือแดง=0,มังกร=0,มังกรคู่=0,มังกรคี่=0,มังกรดำ=0,มังกรแดง=0,เสมอ=0 WHERE ID=$id";
-	$con->query($sql);
-}
-function check($id){
-	global $con;
-	$table='dragontigerdb';
-	$sql="SELECT * FROM $table WHERE ID=$id";
-	$result=$con->query($sql);
-	$row = $result->fetch_assoc();
-	$reply='คุณ '.json_decode($row['Name'],true).'
-';
-	$n=0;
-	$res=array('🐯เสือ(1)','☘️คี่ ฝั่ง 🐯เสือ(11)','🍀คู่ ฝั่ง 🐯เสือ(12)','⚫ดำ ฝั่ง 🐯เสือ(13)','🔴แดง ฝั่ง 🐯เสือ(14)','🐉มังกร(2)','☘️คี่ ฝั่ง 🐉มังกร(21)','🍀คู่ ฝั่ง 🐉มังกร(22)','⚫ดำ ฝั่ง 🐉มังกร(23)','🔴แดง ฝั่ง 🐉มังกร(24)','⚖️เสมอ(3)');
-	foreach($row as $v){
-		if($v!=0&&$n>=7){
-			$reply.='➡️แทง '.$res[$n-7]." $v บาท
-";
+		if($manymessage==2){
+			$messages = [
+				[
+				'type' => 'text',
+				'text' => $replytext1
+				],
+				[
+				'type' => 'text',
+				'text' => $replytext2
+				]
+			];
 		}
-		$n++;
+		$url = 'https://api.line.me/v2/bot/message/reply';		//url สำหรับตอบกลับ
+		$data = [
+			'replyToken' => $replyToken,				//replayToken ใส่ตรงนี้
+			'messages' => $messages,
+		];
+		$post = json_encode($data);						//web สำหรับตอบกลับ
+		$headers = array('Content-Type: application/json', 'Authorization: Bearer ' . $access_token);
+														//headers สำหรับตอบกลับ
+		$ch = curl_init($url);							//เริ่ม curl 
+		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");//ปรับเป็นแบบ post
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);	
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $post);	//ใส่ข้อความที่จะส่ง
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);	//ส่ง header
+		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);	
+		curl_exec($ch);									//ส่งไปให้ไลน์ตอบกลับ
 	}
-	$reply.='คงเหลือ '.$row['NET'].' บาท';
-	return $reply;
 }
