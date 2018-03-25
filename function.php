@@ -365,7 +365,7 @@ function resultdragontiger($text){
 				update($row['ID'],$table,'play',0);
 				//insert into LineID
 				$insert_lineid="INSERT INTO ".$row['LineID']." (รายการ,จำนวนเงิน,วัน,เวลา)
-				VALUE ('แทงเสือมังกร',$money,'$date','$time')";$con->query($insert_lineid);
+				VALUES ('แทงเสือมังกร',$money,'$date','$time')";$con->query($insert_lineid);
 				//สร้างข้อความสรุปผล
 				if($money>0){
 					$reply.='
@@ -394,7 +394,7 @@ function resultdragontiger($text){
 			$lap++;
 		}
 		$insert_panal="INSERT INTO panaldt (รอบ,รอบย่อย,ได้,เสีย,วัน,เวลา)
-		VALUE ($lap,$sublap,$profit,$loss,'$date','$time')";
+		VALUES ($lap,$sublap,$profit,$loss,'$date','$time')";
 		$con->query($insert_panal);
 	}
 	else{
