@@ -358,7 +358,7 @@ function resultdragontiger($text){
 						$row[$n]=0;
 					}
 				}
-				$money=number_format($money);
+				$money=number_format($money,0,'.','');
 				//ส่งไปเก็บค่าใน database
 				update($row['ID'],$table,'NET',($row['NET']+$money));
 				//เปลี่ยนเป็น 0
