@@ -40,8 +40,8 @@ function create($lineid){
 	ID INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 	รายการ VARCHAR(255),
 	จำนวนเงิน INT,
-	วัน DATE,
-	เวลา TIME
+	วัน VARCHAR(255),
+	เวลา VARCHAR(255)
 	)";
 	$con->query($sql);
 }
