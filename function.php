@@ -1,8 +1,8 @@
 <?php
-$servername = "den1.mysql6.gear.host";
-$username = "line";
-$password = "Og8B4hjP4_2?";
-$database = "Line";
+$servername = "den1.mysql2.gear.host";
+$username = "bot001";
+$password = "Password@123";
+$database = "bot001";
 $con = new mysqli($servername, $username, $password,$database);
 	//ตั้งค่าเพื่อใช้ sql ทั้งโปรแกรมแบบ global
 function getid($lineid,$table){ 					//ฟังก์ชั่นหาค่า id จาก lineid
