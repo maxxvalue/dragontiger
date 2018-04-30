@@ -134,9 +134,9 @@ lineId:$lineid";
 				if($sarop==0){
 					$manymessage=2;
 					update(1,$table,"status",2);
-					update(1,$table,"admin",1);									
+					update(1,$table,"admin",1);
 					$replytext1='♠️♥️ขอให้เฮงๆรวย♦️♣️';
-					$replytext2="􂘁􀅏+􏿿เปิดรอบที่".$lap"􂘁􀅏+􏿿";
+					$replytext2="เปิดรอบที่ ".$lap;
 				}
 				else{
 					$replytext='❌กรุณาสรุปผลก่อน❌';
