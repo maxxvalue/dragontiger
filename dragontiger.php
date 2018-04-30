@@ -135,7 +135,7 @@ lineId:$lineid";
 					$manymessage=2;
 					update(1,$table,"status",2);
 					update(1,$table,"admin",1);
-					$replytext1='🎲🎲บ้านป๊อกเด้ง🎲🎲';	
+					$replytext1='♠️♥️บ้านป๊อก10♦️♣️';	
 					$replytext2="เปิดรอบที่ ".$lap;
 				}
 				else{
