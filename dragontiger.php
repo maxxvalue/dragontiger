@@ -135,8 +135,8 @@ lineId:$lineid";
 					$manymessage=2;
 					update(1,$table,"status",2);
 					update(1,$table,"admin",1);
-					$replytext1='♠️♥️เปิดรอบที่ ".$lap♦️♣️';
-					$replytext2=" ".$lap;
+					$replytext1='♠️♥️เปิดรอบที่ ♦️♣️".$lap';
+					$replytext2=" ";
 				}
 				else{
 					$replytext='❌กรุณาสรุปผลก่อน❌';
