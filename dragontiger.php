@@ -113,12 +113,12 @@ lineId:$lineid";
 				$replytext="เตรียมเริ่มรอบแรก...";
 			}
 			elseif($text=="op"||$text=="Op"){
-				$replytext='เปิดรอบแล้วไม่ต้องเปิดรอบอีก❌';
+				$replytext='คุณได้เปิดรอบไปแล้ว❌';
 			}
 			//ปิดรอบ
 			if(($text=='End'||$text=='end')&&$status==1&&$poll==0){
 				update(1,$table,'status',0);
-				$replytext='จบการเล่นรอบนี้...';
+				$replytext='ปิดรอบทั้งหมด...';
 			}
 			elseif(($text=='End'||$text=='end')&&$status==0){
 				$replytext='ใช้คำสั่ง op เพื่อเปิดรอบ❌';
