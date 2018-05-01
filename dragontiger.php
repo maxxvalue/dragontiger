@@ -132,10 +132,11 @@ lineId:$lineid";
 			}
 			elseif($type=="sticker"&&$status==1){
 				if($sarop==0){
-					$manymessage=1;
+					$manymessage=2;
 					update(1,$table,"status",2);
 					update(1,$table,"admin",1);
-					$replytext1="เปิดรอบที่ ".$lap;
+					$replytext1='';
+					$replytext2="เปิดรอบที่ ".$lap;
 				}
 				else{
 					$replytext='❌กรุณาสรุปผลก่อน❌';
